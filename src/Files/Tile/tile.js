@@ -1,6 +1,7 @@
 import { View, StyleSheet, Image, Pressable, ToastAndroid } from "react-native";
-import tile from "../../Images/Tiles/tile-back-cover.png";
+import React, { useState } from "react";
 
+// ARRAY DATA
 const CardImages = [
   { image: require(`../../Images/Tiles/tile-back-cover.png`) },
   { image: require(`../../Images/Tiles/computing.png`) },
@@ -13,28 +14,42 @@ const CardImages = [
   { image: require(`../../Images/Tiles/direct-memory-access.png`) },
 ];
 
-const tileClick = (num) => {
-  ToastAndroid.showWithGravity(
-    num.toString(),
-    ToastAndroid.SHORT,
-    ToastAndroid.TOP
-  );
-  console.log("Pressed " + num);
-  // console.log(CardImages[num].image);
-};
-
 const Tile = (props) => {
   const num = props.keyValue;
+  const [shown, setShown] = useState(0);
+  const [choiceOne, setChoiceOne] = useState(false);
+  const [choiceTwo, setChoiceTwo] = useState(false);
+
+  // FUNCTION
+  const tileClick = (num) => {
+    ToastAndroid.showWithGravity(
+      num.toString(),
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP
+    );
+    console.log("Pressed " + num);
+
+    // FUNCTION for choice 1
+    choiceOne ? setShown(0) : setShown(num);
+    setChoiceOne(!choiceOne);
+
+    // FUNCTION for choice 2
+    // choiceTwo ? setShown(0) : setShown(num);
+    // console.log(CardImages[num].image);
+  };
+
+  // RETURN
   return (
     <View>
       <Pressable onPress={() => tileClick(num)}>
-        <Image source={tile} style={styles.tile} />
+        <Image source={CardImages[shown].image} style={styles.tile} />
         {/* <Image source={CardImages[num].image} style={styles.tile} /> */}
       </Pressable>
     </View>
   );
 };
 
+// FUNCTION
 const styles = StyleSheet.create({
   tile: {
     width: 65,
