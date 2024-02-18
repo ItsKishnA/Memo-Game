@@ -16,9 +16,9 @@ const CardImages = [
 
 const Tile = (props) => {
   const num = props.keyValue;
-  const [shown, setShown] = useState(0);
+  const [flipped, setFlipped] = useState(0);
   const [choiceOne, setChoiceOne] = useState(false);
-  const [choiceTwo, setChoiceTwo] = useState(false);
+  const disabler = false;
 
   // FUNCTION
   const tileClick = (num) => {
@@ -30,20 +30,15 @@ const Tile = (props) => {
     console.log("Pressed " + num);
 
     // FUNCTION for choice 1
-    choiceOne ? setShown(0) : setShown(num);
+    choiceOne ? setFlipped(0) : setFlipped(num);
     setChoiceOne(!choiceOne);
-
-    // FUNCTION for choice 2
-    // choiceTwo ? setShown(0) : setShown(num);
-    // console.log(CardImages[num].image);
   };
 
   // RETURN
   return (
     <View>
       <Pressable onPress={() => tileClick(num)}>
-        <Image source={CardImages[shown].image} style={styles.tile} />
-        {/* <Image source={CardImages[num].image} style={styles.tile} /> */}
+        <Image source={CardImages[flipped].image} style={styles.tile} />
       </Pressable>
     </View>
   );

@@ -12,10 +12,8 @@ const Fingerprint = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     backgroundColor: "black",
     flexDirection: "row",
-    // borderRadius: 10,
     borderTopStartRadius: 7,
     borderTopEndRadius: 7,
   },
@@ -27,12 +25,10 @@ const styles = StyleSheet.create({
     borderBottomColor: "#0091ab",
     margin: 10,
     marginRight: 5,
-    // marginBottom: 20,
   },
 
   text: {
     fontSize: 10,
-    // backgroundColor: "red",
     color: "#04d9ff",
     textAlign: "center",
     marginHorizontal: 10,
@@ -42,7 +38,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "white",
     textAlign: "center",
-    // marginHorizontal: 10,
     textAlignVertical: "center",
   },
 });
