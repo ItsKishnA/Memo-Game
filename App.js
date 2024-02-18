@@ -1,16 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import GamePlot from "./src/Files/Gameplot/gameplot";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
-
-const cardImages = [
-  { src: "./src/Images/Tiles/computing.png" },
-  { src: "./src/Images/Tiles/direct-memory-access.png" },
-  { src: "./src/Images/Tiles/grid.png" },
-  { src: "./src/Images/Tiles/micro-sd-card.png" },
-  { src: "./src/Images/Tiles/ram.png" },
-  { src: "./src/Images/Tiles/usb-stick.png" },
-];
+import Rough from "./src/Files/Upgrading/rough";
 
 export default function App() {
   return (
@@ -19,6 +11,7 @@ export default function App() {
 
       <Text style={styles.text}>My Game...</Text>
       <GamePlot />
+      {/* <Rough /> */}
       <Fingerprint />
     </View>
   );
@@ -27,6 +20,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // padding: 50,
     backgroundColor: "#836FFF",
   },
   text: {
