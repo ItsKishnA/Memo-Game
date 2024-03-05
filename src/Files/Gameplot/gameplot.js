@@ -7,11 +7,7 @@ import {
   Text,
   Button,
 } from "react-native";
-<<<<<<< HEAD
 import { useState, useEffect } from "react";
-=======
-import { useState } from "react";
->>>>>>> d98e54fdbbf33aa5b1ede5dc9c605faf5edac52c
 
 // ARRAY DATA
 const CardImages = [
@@ -26,7 +22,6 @@ const CardImages = [
   { image: require(`../../Images/Tiles/8.png`) },
 ];
 
-<<<<<<< HEAD
 // FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
 function imagePairs() {
   //total num of images required
@@ -81,46 +76,16 @@ const Grid = ({}) => {
         return [...prevState, tileIndex];
       }
     });
-    // setPressedImages([...pressedImages, tileIndex]);
-=======
-const Grid = ({}) => {
-  const [pressedImages, setPressedImages] = useState([]);
-
-  const handleClick = (num) => {
-    setPressedImages((prevState) => {
-      if (prevState.includes(num)) {
-        // If the image is already pressed, revert it back to the original
-        return prevState.filter((index) => index !== num);
-      } else {
-        // If two images are already flipped, revert them back
-        if (prevState.length === 2) {
-          return [num];
-        }
-        // Otherwise, flip the image
-        return [...prevState, num];
-      }
-    });
->>>>>>> d98e54fdbbf33aa5b1ede5dc9c605faf5edac52c
   };
 
   const handleButtonPress = () => {
     // Set all images to hidden
-<<<<<<< HEAD
     setPressedImages([]);
     pairs = imagePairs();
-=======
-    const allIndices = Array.from(
-      { length: CardImages.length },
-      (_, i) => i + 1
-    );
-    setPressedImages([]);
->>>>>>> d98e54fdbbf33aa5b1ede5dc9c605faf5edac52c
   };
 
   return (
     <View>
-<<<<<<< HEAD
-      {/* {console.log("rendering")} */}
       <View style={styles.tileContainer}>
         {Array(2) // row=2
           .fill()
@@ -150,32 +115,6 @@ const Grid = ({}) => {
             </View>
           ))}
       </View>
-=======
-      {Array(2) // row=2
-        .fill()
-        .map((_, i) => (
-          <View key={i} style={styles.eachLine}>
-            {Array(4) // column=4
-              .fill()
-              .map((_, j) => {
-                const index = 4 * i + j + 1;
-                const source = pressedImages.includes(index)
-                  ? CardImages[index].image
-                  : CardImages[0].image;
-                return (
-                  <Pressable onPress={() => handleClick(index)}>
-                    <Image
-                      source={source}
-                      style={styles.tile}
-                      key={j}
-                      keyValue={index}
-                    />
-                  </Pressable>
-                );
-              })}
-          </View>
-        ))}
->>>>>>> d98e54fdbbf33aa5b1ede5dc9c605faf5edac52c
       <Button
         title="New Game"
         onPress={handleButtonPress}
@@ -186,12 +125,8 @@ const Grid = ({}) => {
 };
 
 const GamePlot = () => {
-<<<<<<< HEAD
   console.log("*************GamePlot.js*************");
 
-=======
-  console.log("GamePlot.js");
->>>>>>> d98e54fdbbf33aa5b1ede5dc9c605faf5edac52c
   return (
     <View style={styles.screen}>
       <Grid />
@@ -207,13 +142,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-<<<<<<< HEAD
   tileContainer: {
     margin: 10,
   },
 
-=======
->>>>>>> d98e54fdbbf33aa5b1ede5dc9c605faf5edac52c
   tile: {
     width: 65,
     height: 65,
