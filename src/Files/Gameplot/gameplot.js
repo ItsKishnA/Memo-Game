@@ -5,9 +5,9 @@ import {
   Pressable,
   ToastAndroid,
   Text,
+  Button,
 } from "react-native";
-import Tile from "../Tile/tile.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // ARRAY DATA
 const CardImages = [
@@ -22,81 +22,116 @@ const CardImages = [
   { image: require(`../../Images/Tiles/8.png`) },
 ];
 
-const RenderedGamePlot = ({ row, column }) => {
-  const [choiceOne, setChoiceOne] = useState(false);
-  const [flipped, setFlipped] = useState(0);
+// FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
+function imagePairs() {
+  //total num of images required
+  const numPairs = 4;
 
-  // FUNCTION
-  const handleClick = (num) => {
-    choiceOne ? setFlipped(0) : setFlipped(num);
-    setChoiceOne(!choiceOne);
-    console.log("Pressed " + num);
+  // Create an array of indices
+  const indices = Array.from(
+    { length: CardImages.length - 1 },
+    (_, i) => i + 1
+  );
+
+  // Generate 4 random indices from 0 to the size of the new array - 1
+  const randomIndices = [];
+  while (randomIndices.length < numPairs) {
+    const randIndex = Math.floor(Math.random() * indices.length);
+    if (!randomIndices.includes(randIndex)) {
+      randomIndices.push(randIndex);
+    }
+  }
+
+  // Create pairs of indices
+  const pairs = randomIndices.flatMap((index) => [index + 1, index + 1]);
+
+  // Shuffle the pairs
+  for (let i = pairs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+  }
+
+  console.log("Pairs are : " + pairs);
+
+  return pairs;
+}
+
+let pairs = imagePairs();
+
+const Grid = ({}) => {
+  const [pressedImages, setPressedImages] = useState([]);
+
+  const handleClick = (tileIndex) => {
+    console.log("tileIndex is : " + tileIndex);
+    setPressedImages((prevState) => {
+      if (prevState.includes(tileIndex)) {
+        // If the tile is already pressed, revert it back to the original
+        return prevState.filter((index) => index !== tileIndex);
+      } else {
+        // If two tiles are already flipped, revert them back
+        if (prevState.length === 2) {
+          return [tileIndex];
+        }
+        // Otherwise, flip the tile
+        return [...prevState, tileIndex];
+      }
+    });
+    // setPressedImages([...pressedImages, tileIndex]);
   };
 
-  // FUNCTION
-  const tile = () => {
-    return (
-      <View>
-        <Image source={CardImages[0].image} style={styles.tile} />
-      </View>
-    );
+  const handleButtonPress = () => {
+    // Set all images to hidden
+    setPressedImages([]);
+    pairs = imagePairs();
   };
 
   return (
-    <View style={styles.screen}>
-      {Array(row)
-        .fill()
-        .map((_, i) => (
-          <View key={i} style={styles.eachLine}>
-            {Array(column)
-              .fill()
-              .map((_, j) => (
-                <Pressable
-                  key={j}
-                  onPress={() => handleClick(column * i + j + 1)}
-                >
-                  {tile(j, (keyValue = column * i + j + 1))}
-                  {/* <Tile key={j} keyValue={column * i + j + 1} /> */}
-                </Pressable>
-              ))}
-          </View>
-        ))}
+    <View>
+      {/* {console.log("rendering")} */}
+      <View style={styles.tileContainer}>
+        {Array(2) // row=2
+          .fill()
+          .map((_, i) => (
+            <View key={i} style={styles.eachLine}>
+              {Array(4) // column=4
+                .fill()
+                .map((_, j) => {
+                  let index = pairs[4 * i + j];
+                  const source = pressedImages.includes(4 * i + j)
+                    ? CardImages[index].image
+                    : CardImages[0].image;
+
+                  return (
+                    <Pressable
+                      onPress={() => handleClick(4 * i + j)}
+                      key={4 * i + j}
+                    >
+                      <Image
+                        source={source}
+                        style={styles.tile}
+                        keyValue={index}
+                      />
+                    </Pressable>
+                  );
+                })}
+            </View>
+          ))}
+      </View>
+      <Button
+        title="New Game"
+        onPress={handleButtonPress}
+        style={styles.button}
+      />
     </View>
   );
 };
 
 const GamePlot = () => {
-  let row = 2;
-  let column = 4;
+  console.log("*************GamePlot.js*************");
 
-  // {/*below */
-  // // Function to shuffle an array using Fisher-Yates algorithm
-  // function shuffle(array) {
-  //   for (let i = array.length - 1; i > 0; i--) {
-  //     const j = Math.floor(Math.random() * (i + 1));
-  //     [array[i], array[j]] = [array[j], array[i]];
-  //   }
-  //   return array;
-  // }
-
-  // // let originalArray = [1, 2, 3, 4, 5];
-
-  // // Create a new array by excluding the first element and then concatenating it with itself
-  // let newArray = CardImages.slice(1).map((obj) => ({ ...obj }));
-
-  // // Shuffle the elements of the new array
-  // // newArray = shuffle(newArray);
-
-  // // Map over the shuffled array to assign unique IDs to each element
-  // // newArray = newArray.map((element, index) => ({ id: index, value: element }));
-
-  // console.log(newArray);
-
-  // /*above */}
-  console.log("GamePlot.js");
   return (
     <View style={styles.screen}>
-      <RenderedGamePlot row={row} column={column} />
+      <Grid />
     </View>
   );
 };
@@ -108,13 +143,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
+  tileContainer: {
+    margin: 10,
+  },
+
   tile: {
     width: 65,
     height: 65,
     margin: 5,
   },
+
   eachLine: {
     flexDirection: "row",
+  },
+
+  button: {
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+    marginTop: 40,
+    borderRadius: 10,
   },
 });
 
