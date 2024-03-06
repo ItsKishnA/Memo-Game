@@ -1,13 +1,9 @@
-import {
-  View,
-  StyleSheet,
-  Image,
-  Pressable,
-  ToastAndroid,
-  Text,
-  Button,
-} from "react-native";
+import { View, StyleSheet, Image, Pressable, Button } from "react-native";
 import { useState, useEffect } from "react";
+
+const rows = 2,
+  columns = 4;
+let pairs = imagePairs();
 
 // ARRAY DATA
 const CardImages = [
@@ -25,7 +21,7 @@ const CardImages = [
 // FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
 function imagePairs() {
   //total num of images required
-  const numPairs = 4;
+  const numPairs = (rows * columns) / 2;
 
   // Create an array of indices
   const indices = Array.from(
@@ -56,8 +52,6 @@ function imagePairs() {
   return pairs;
 }
 
-let pairs = imagePairs();
-
 const Grid = ({}) => {
   const [pressedImages, setPressedImages] = useState([]);
 
@@ -87,22 +81,22 @@ const Grid = ({}) => {
   return (
     <View>
       <View style={styles.tileContainer}>
-        {Array(2) // row=2
+        {Array(rows) // row=2
           .fill()
           .map((_, i) => (
             <View key={i} style={styles.eachLine}>
-              {Array(4) // column=4
+              {Array(columns) // column=4
                 .fill()
                 .map((_, j) => {
-                  let index = pairs[4 * i + j];
-                  const source = pressedImages.includes(4 * i + j)
+                  let index = pairs[columns * i + j];
+                  const source = pressedImages.includes(columns * i + j)
                     ? CardImages[index].image
                     : CardImages[0].image;
 
                   return (
                     <Pressable
-                      onPress={() => handleClick(4 * i + j)}
-                      key={4 * i + j}
+                      onPress={() => handleClick(columns * i + j)}
+                      key={4 * i + j} // each child must have a unique key
                     >
                       <Image
                         source={source}
