@@ -1,9 +1,16 @@
-import { View, StyleSheet, Image, Pressable, Button } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  ToastAndroid,
+  Text,
+  Button,
+} from "react-native";
 import { useState, useEffect } from "react";
 
 const rows = 2,
   columns = 4;
-let pairs = imagePairs();
 
 // ARRAY DATA
 const CardImages = [
@@ -20,37 +27,24 @@ const CardImages = [
 
 // FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
 function imagePairs() {
-  //total num of images required
   const numPairs = (rows * columns) / 2;
+  const indices = new Set();
 
-  // Create an array of indices
-  const indices = Array.from(
-    { length: CardImages.length - 1 },
-    (_, i) => i + 1
-  );
-
-  // Generate 4 random indices from 0 to the size of the new array - 1
-  const randomIndices = [];
-  while (randomIndices.length < numPairs) {
-    const randIndex = Math.floor(Math.random() * indices.length);
-    if (!randomIndices.includes(randIndex)) {
-      randomIndices.push(randIndex);
-    }
+  while (indices.size < numPairs) {
+    indices.add(Math.floor(Math.random() * (CardImages.length - 1)));
   }
 
-  // Create pairs of indices
-  const pairs = randomIndices.flatMap((index) => [index + 1, index + 1]);
+  let pairs = Array.from(indices).flatMap((index) => [index + 1, index + 1]);
 
-  // Shuffle the pairs
   for (let i = pairs.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
   }
-
   console.log("Pairs are : " + pairs);
-
   return pairs;
 }
+
+let pairs = imagePairs();
 
 const Grid = ({}) => {
   const [pressedImages, setPressedImages] = useState([]);
@@ -88,20 +82,20 @@ const Grid = ({}) => {
               {Array(columns) // column=4
                 .fill()
                 .map((_, j) => {
-                  let index = pairs[columns * i + j];
-                  const source = pressedImages.includes(columns * i + j)
-                    ? CardImages[index].image
+                  const tileIndex = columns * i + j;
+                  const source = pressedImages.includes(tileIndex)
+                    ? CardImages[pairs[tileIndex]].image
                     : CardImages[0].image;
 
                   return (
                     <Pressable
-                      onPress={() => handleClick(columns * i + j)}
-                      key={4 * i + j} // each child must have a unique key
+                      onPress={() => handleClick(tileIndex)}
+                      key={tileIndex}
                     >
                       <Image
                         source={source}
                         style={styles.tile}
-                        keyValue={index}
+                        keyValue={pairs[tileIndex]}
                       />
                     </Pressable>
                   );
