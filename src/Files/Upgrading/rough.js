@@ -1,100 +1,108 @@
-class ImagePairs {
-  constructor(CardImages) {
-    this.CardImages = CardImages.slice(1); // Exclude the first image
+import {
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  ToastAndroid,
+  Text,
+  Button,
+} from "react-native";
+import { useState, useEffect } from "react";
+
+const rows = 2,
+  columns = 4;
+
+// ARRAY DATA
+const CardImages = [
+  { image: require(`../../Images/Tiles/tile-back-cover.png`) },
+  { image: require(`../../Images/Tiles/1.png`) },
+  { image: require(`../../Images/Tiles/2.png`) },
+  { image: require(`../../Images/Tiles/3.png`) },
+  { image: require(`../../Images/Tiles/4.png`) },
+  { image: require(`../../Images/Tiles/5.png`) },
+  { image: require(`../../Images/Tiles/6.png`) },
+  { image: require(`../../Images/Tiles/7.png`) },
+  { image: require(`../../Images/Tiles/8.png`) },
+];
+
+// FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
+function imagePairs() {
+  const numPairs = (rows * columns) / 2;
+  const indices = new Set();
+
+  while (indices.size < numPairs) {
+    indices.add(Math.floor(Math.random() * (CardImages.length - 1)));
   }
 
-  getPairs() {
-    // Generate 4 random indices from 0 to the size of the new array - 1
-    const indices = [];
-    while (indices.length < 4) {
-      const randIndex = Math.floor(Math.random() * this.CardImages.length);
-      if (!indices.includes(randIndex)) {
-        indices.push(randIndex);
-      }
-    }
+  let pairs = Array.from(indices).flatMap((index) => [index + 1, index + 1]);
 
-    // Create pairs of indices
-    const pairs = indices.flatMap((index) => [index, index]);
-
-    // Shuffle the pairs
-    for (let i = pairs.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
-    }
-    console.log(pairs);
-    return pairs;
+  for (let i = pairs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
   }
+  console.log("Pairs are : " + pairs);
+  return pairs;
 }
+
+let pairs = imagePairs();
 
 const Grid = ({}) => {
   const [pressedImages, setPressedImages] = useState([]);
-  const [imagePairs, setImagePairs] = useState([]);
-  const [imagePairGenerator, setImagePairGenerator] = useState(null);
-  const [visibleImages, setVisibleImages] = useState(Array(8).fill(0));
 
-  useEffect(() => {
-    const generator = new ImagePairs(CardImages);
-    setImagePairGenerator(generator);
-    setImagePairs(generator.getPairs());
-  }, []);
-
-  const handleClick = (index) => {
-    // Add the clicked image to the pressedImages array
-    setPressedImages((prev) => [...prev, imagePairs[index]]);
-
-    // Check if two images have been pressed
-    if (pressedImages.length === 2) {
-      // If the two images are a pair, keep them visible
-      if (pressedImages[0] === pressedImages[1]) {
-        setPressedImages([]);
+  const handleClick = (tileIndex) => {
+    console.log("tileIndex is : " + tileIndex);
+    setPressedImages((prevState) => {
+      if (prevState.includes(tileIndex)) {
+        // If the tile is already pressed, revert it back to the original
+        return prevState.filter((index) => index !== tileIndex);
       } else {
-        // If the two images are not a pair, hide them after a delay
-        setTimeout(() => {
-          setPressedImages([]);
-          const newVisibleImages = [...visibleImages];
-          newVisibleImages[index] = 0;
-          setVisibleImages(newVisibleImages);
-        }, 1000);
+        // If two tiles are already flipped, revert them back
+        if (prevState.length === 2) {
+          return [tileIndex];
+        }
+        // Otherwise, flip the tile
+        return [...prevState, tileIndex];
       }
-    } else {
-      const newVisibleImages = [...visibleImages];
-      newVisibleImages[index] = imagePairs[index] + 1;
-      setVisibleImages(newVisibleImages);
-    }
+    });
   };
 
   const handleButtonPress = () => {
+    // Set all images to hidden
     setPressedImages([]);
-    setImagePairs(imagePairGenerator.getPairs());
+    pairs = imagePairs();
   };
 
   return (
     <View>
-      {Array(2)
-        .fill()
-        .map((_, i) => (
-          <View key={i} style={styles.eachLine}>
-            {Array(4)
-              .fill()
-              .map((_, j) => {
-                const index = 4 * i + j;
-                const imagePairIndex = imagePairs[index];
-                const cardImage = CardImages[imagePairIndex + 1];
-                if (imagePairIndex !== undefined && cardImage !== undefined) {
+      <View style={styles.tileContainer}>
+        {Array(rows) // row=2
+          .fill()
+          .map((_, i) => (
+            <View key={i} style={styles.eachLine}>
+              {Array(columns) // column=4
+                .fill()
+                .map((_, j) => {
+                  const tileIndex = columns * i + j;
+                  const source = pressedImages.includes(tileIndex)
+                    ? CardImages[pairs[tileIndex]].image
+                    : CardImages[0].image;
+
                   return (
-                    <Pressable onPress={() => handleClick(index)} key={index}>
+                    <Pressable
+                      onPress={() => handleClick(tileIndex)}
+                      key={tileIndex}
+                    >
                       <Image
-                        source={CardImages[visibleImages[index]].image}
+                        source={source}
                         style={styles.tile}
+                        keyValue={pairs[tileIndex]}
                       />
                     </Pressable>
                   );
-                } else {
-                  return null;
-                }
-              })}
-          </View>
-        ))}
+                })}
+            </View>
+          ))}
+      </View>
       <Button
         title="New Game"
         onPress={handleButtonPress}
@@ -104,11 +112,53 @@ const Grid = ({}) => {
   );
 };
 
-const GamePlot = () => {
-  console.log("GamePlot.js");
-  return (
-    <View style={styles.screen}>
-      <Grid />
-    </View>
-  );
-};
+const GamePlot = () => (
+  <View style={styles.screen}>
+    <Grid />
+  </View>
+);
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: "#836FFF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  tileContainer: {
+    margin: 10,
+  },
+
+  tile: {
+    width: 65,
+    height: 65,
+    margin: 5,
+  },
+
+  eachLine: {
+    flexDirection: "row",
+  },
+
+  button: {
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+    marginTop: 40,
+    borderRadius: 10,
+  },
+});
+
+export default GamePlot;
+
+/*
+computing.png
+direct-memory-access.png
+grid.png
+micro-sd-card.png
+ram.png
+usb-stick.png
+hacker.png
+cloud.png
+*/

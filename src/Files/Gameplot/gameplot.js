@@ -43,12 +43,12 @@ function imagePairs() {
   console.log("Pairs are : " + pairs);
   return pairs;
 }
-
 let pairs = imagePairs();
 
 const Grid = ({}) => {
   const [pressedImages, setPressedImages] = useState([]);
 
+  // FUNCTION TO HANDLE TILE PRESS
   const handleClick = (tileIndex) => {
     console.log("tileIndex is : " + tileIndex);
     setPressedImages((prevState) => {
@@ -66,6 +66,7 @@ const Grid = ({}) => {
     });
   };
 
+  // FUNCTION TO HANDLE BUTTON PRESS
   const handleButtonPress = () => {
     // Set all images to hidden
     setPressedImages([]);
@@ -94,7 +95,10 @@ const Grid = ({}) => {
                     >
                       <Image
                         source={source}
-                        style={styles.tile}
+                        style={[
+                          styles.tile,
+                          source === CardImages[0].image && styles.otherStyle,
+                        ]}
                         keyValue={pairs[tileIndex]}
                       />
                     </Pressable>
@@ -105,27 +109,24 @@ const Grid = ({}) => {
       </View>
       <Button
         title="New Game"
-        onPress={handleButtonPress}
         style={styles.button}
+        onPress={handleButtonPress}
       />
     </View>
   );
 };
 
-const GamePlot = () => {
-  console.log("*************GamePlot.js*************");
+const GamePlot = () => (
+  <View style={styles.screen}>
+    <Grid />
+  </View>
+);
 
-  return (
-    <View style={styles.screen}>
-      <Grid />
-    </View>
-  );
-};
-
+// STYLESHEET
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#836FFF",
+    // backgroundColor: "#333",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -144,17 +145,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
+  otherStyle: {
+    tintColor: "aqua",
+    opacity: 0.8,
+  },
+
   button: {
     backgroundColor: "#007BFF",
     padding: 10,
-    borderRadius: 5,
-    margin: 10,
     marginTop: 40,
     borderRadius: 10,
   },
 });
 
 export default GamePlot;
+
+// #E8AFFF neon purple for bg of opened tiles
 
 /*
 computing.png

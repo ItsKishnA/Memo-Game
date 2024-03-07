@@ -1,15 +1,22 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import GamePlot from "./src/Files/Gameplot/gameplot";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
-// import Rough from "./src/Files/Upgrading/rough";
+import Bluish from "./src/Images/BG-Gradient-Spots/bluish.png";
+// import Whitish from "./src/Images/BG-Gradient-Spots/whitish.png";
 
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      <Text style={styles.text}>My Game...</Text>
-      <GamePlot />
+      <Text style={styles.text}>. . . MEMO-GAME . . .</Text>
+      <ImageBackground
+        source={Bluish}
+        imageStyle={styles.bluish}
+        style={styles.container}
+      >
+        <GamePlot />
+      </ImageBackground>
       <Fingerprint />
     </View>
   );
@@ -18,14 +25,19 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#836FFF",
+    backgroundColor: "#0c0c0c",
   },
+  bluish: {
+    opacity: 0.35,
+    resizeMode: "contain",
+  },
+
   text: {
-    fontSize: 25,
+    fontSize: 30,
     color: "#fff",
     padding: 10,
-    margin: 20,
-    marginTop: 30,
+    marginTop: 50,
     textAlign: "center",
+    fontWeight: "800",
   },
 });
