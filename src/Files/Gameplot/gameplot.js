@@ -47,42 +47,61 @@ function imagePairs() {
 let pairs = imagePairs();
 
 const Grid = ({}) => {
-  const [openedImages, setOpenedImages] = useState([]);
+  const [opened, setOpened] = useState([]);
   const [paired, setPaired] = useState([]);
+  const [unmatched, setUnmatched] = useState([]);
 
   // FUNCTION TO HANDLE TILE PRESS
-  const handleClick = (tileIndex, pairNo) => {
-    setOpenedImages((prevState) => {
-      if (prevState.includes(tileIndex)) {
-        // If the tile is already pressed, revert it back to the original
-        return prevState.filter((index) => index !== tileIndex);
-      } else {
-        // If two tiles are already flipped, revert them back
-        if (prevState.length === 2) {
-          return [tileIndex];
-        }
-
-        return [...prevState, tileIndex];
+  const handleClick = async (tileIndex, pairNo) => {
+    // If the tile is already opened
+    if (opened.includes(tileIndex)) {
+      // If the tile is already paired, do nothing
+      if (paired.includes(tileIndex)) {
+        return;
       }
-    });
+      // Otherwise, close the tile
+      else {
+        setOpened(opened.filter((index) => index !== tileIndex));
+      }
+    }
+    // If the tile is closed
+    else {
+      // If no tile is opened, open the tile
+      if (opened.length === paired.length) {
+        setOpened([...opened, tileIndex]);
+      }
+      // If one tile is already opened
+      else if (opened.length === paired.length + 1) {
+        // If the pairNo are the same, never close them
+        if (pairs[opened[0]] === pairNo) {
+          setPaired([...paired, tileIndex, opened[0]]);
+          setOpened(paired);
+        }
+        // Otherwise, close both the opened tiles after 2.5 sec delay
+        else {
+          setOpened([...opened, tileIndex]);
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          setOpened(paired);
+        }
+      }
+    }
   };
 
   /*
+  for closed
   
-  1. First is being opened
-    if it is inside paired do nothing
-    else, close it
-  2. Second is being opened
-    If two are opened, check if they are same or not
-      If same, log MATCH in console and add them to paired
-  3. Third is being opened
+  none is prevOpened
+  One is prevOpened
+  Two is prevOpened
     
   */
 
   // FUNCTION TO HANDLE BUTTON PRESS
   const handleButtonPress = () => {
     // Set all images to hidden
-    setOpenedImages([]);
+    setOpened([]);
+    setPaired([]);
+    setUnmatched([]);
     pairs = imagePairs();
   };
 
@@ -97,7 +116,7 @@ const Grid = ({}) => {
                 .fill()
                 .map((_, j) => {
                   const tileIndex = columns * i + j; // column=4 * i + j
-                  const source = openedImages.includes(tileIndex)
+                  const source = opened.includes(tileIndex)
                     ? CardImages[pairs[tileIndex]].image
                     : CardImages[0].image;
 
