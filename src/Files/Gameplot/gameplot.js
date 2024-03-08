@@ -43,15 +43,16 @@ function imagePairs() {
   console.log("Pairs are : " + pairs);
   return pairs;
 }
+
 let pairs = imagePairs();
 
 const Grid = ({}) => {
-  const [pressedImages, setPressedImages] = useState([]);
+  const [openedImages, setOpenedImages] = useState([]);
+  const [paired, setPaired] = useState([]);
 
   // FUNCTION TO HANDLE TILE PRESS
-  const handleClick = (tileIndex) => {
-    console.log("tileIndex is : " + tileIndex);
-    setPressedImages((prevState) => {
+  const handleClick = (tileIndex, pairNo) => {
+    setOpenedImages((prevState) => {
       if (prevState.includes(tileIndex)) {
         // If the tile is already pressed, revert it back to the original
         return prevState.filter((index) => index !== tileIndex);
@@ -60,16 +61,28 @@ const Grid = ({}) => {
         if (prevState.length === 2) {
           return [tileIndex];
         }
-        // Otherwise, flip the tile
+
         return [...prevState, tileIndex];
       }
     });
   };
 
+  /*
+  
+  1. First is being opened
+    if it is inside paired do nothing
+    else, close it
+  2. Second is being opened
+    If two are opened, check if they are same or not
+      If same, log MATCH in console and add them to paired
+  3. Third is being opened
+    
+  */
+
   // FUNCTION TO HANDLE BUTTON PRESS
   const handleButtonPress = () => {
     // Set all images to hidden
-    setPressedImages([]);
+    setOpenedImages([]);
     pairs = imagePairs();
   };
 
@@ -83,14 +96,14 @@ const Grid = ({}) => {
               {Array(columns) // column=4
                 .fill()
                 .map((_, j) => {
-                  const tileIndex = columns * i + j;
-                  const source = pressedImages.includes(tileIndex)
+                  const tileIndex = columns * i + j; // column=4 * i + j
+                  const source = openedImages.includes(tileIndex)
                     ? CardImages[pairs[tileIndex]].image
                     : CardImages[0].image;
 
                   return (
                     <Pressable
-                      onPress={() => handleClick(tileIndex)}
+                      onPress={() => handleClick(tileIndex, pairs[tileIndex])}
                       key={tileIndex}
                     >
                       <Image

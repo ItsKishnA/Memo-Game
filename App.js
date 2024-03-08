@@ -10,13 +10,13 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="light" />
       <Text style={styles.text}>. . . MEMO-GAME . . .</Text>
-      <ImageBackground
+      {/* <ImageBackground
         source={Bluish}
         imageStyle={styles.bluish}
         style={styles.container}
-      >
-        <GamePlot />
-      </ImageBackground>
+      > */}
+      <GamePlot />
+      {/* </ImageBackground> */}
       <Fingerprint />
     </View>
   );
