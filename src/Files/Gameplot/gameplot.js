@@ -30,12 +30,15 @@ function imagePairs() {
   const numPairs = (rows * columns) / 2;
   const indices = new Set();
 
+  // Generate random indices
   while (indices.size < numPairs) {
     indices.add(Math.floor(Math.random() * (CardImages.length - 1)));
   }
 
+  // Duplicate the indices and shuffle them
   let pairs = Array.from(indices).flatMap((index) => [index + 1, index + 1]);
 
+  // Shuffle the pairs
   for (let i = pairs.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
@@ -49,7 +52,7 @@ let pairs = imagePairs();
 const Grid = ({}) => {
   const [opened, setOpened] = useState([]);
   const [paired, setPaired] = useState([]);
-  const [unmatched, setUnmatched] = useState([]);
+  // const [unmatched, setUnmatched] = useState([]);
 
   // FUNCTION TO HANDLE TILE PRESS
   const handleClick = async (tileIndex, pairNo) => {
@@ -182,12 +185,12 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
 
-  button: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    marginTop: 40,
-    borderRadius: 10,
-  },
+  // button: {
+  //   backgroundColor: "#007BFF",
+  //   padding: 10,
+  //   marginTop: 40,
+  //   borderRadius: 10,
+  // },
 });
 
 export default GamePlot;
