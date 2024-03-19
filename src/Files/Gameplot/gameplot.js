@@ -3,8 +3,8 @@ import {
   StyleSheet,
   Image,
   Pressable,
-  ToastAndroid,
-  Text,
+  // ToastAndroid,
+  // Text,
   Button,
 } from "react-native";
 import { useState, useEffect } from "react";
@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 const rows = 2,
   columns = 4;
 
+// TODO: Add more images to game
 // ARRAY DATA
 const CardImages = [
   { image: require(`../../Images/Tiles/tile-back-cover.png`) },
@@ -52,59 +53,56 @@ let pairs = imagePairs();
 const Grid = ({}) => {
   const [opened, setOpened] = useState([]);
   const [paired, setPaired] = useState([]);
-  // const [unmatched, setUnmatched] = useState([]);
+
+  //TODO: Add turns and matched states
+  // const [turns, setTurns] = useState(0);
+  // const [matched, setMatched] = useState(0);
 
   // FUNCTION TO HANDLE TILE PRESS
   const handleClick = async (tileIndex, pairNo) => {
-    // If the tile is already opened
-    if (opened.includes(tileIndex)) {
-      // If the tile is already paired, do nothing
-      if (paired.includes(tileIndex)) {
-        return;
-      }
-      // Otherwise, close the tile
-      else {
-        setOpened(opened.filter((index) => index !== tileIndex));
-      }
-    }
-    // If the tile is closed
-    else {
-      // If no tile is opened, open the tile
+    // As soon as a tile is clicked, increase the turns
+    // setTurns((prevTurns) => prevTurns + 1);
+
+    //CONDITION: Tile isn't opened
+    // If no tile is opened other than paired ones, open the tile
+    if (!opened.includes(tileIndex)) {
+      // If no tile is opened
       if (opened.length === paired.length) {
-        setOpened([...opened, tileIndex]);
+        setOpened([tileIndex, ...paired]);
       }
+
       // If one tile is already opened
       else if (opened.length === paired.length + 1) {
-        // If the pairNo are the same, never close them
-        if (pairs[opened[0]] === pairNo) {
-          setPaired([...paired, tileIndex, opened[0]]);
-          setOpened(paired);
+        // If matches the opened tile, add to paired
+        if (pairNo === pairs[opened[0]]) {
+          setPaired([opened[0], tileIndex, ...paired]);
+          setOpened([opened[0], tileIndex, ...paired]);
+          console.log("Matched");
         }
+
         // Otherwise, close both the opened tiles after 2.5 sec delay
         else {
-          setOpened([...opened, tileIndex]);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          setOpened(paired);
+          const newOpened = [tileIndex, ...opened];
+          setOpened(newOpened);
+          console.log("Not Matched");
+          await new Promise((resolve) => setTimeout(resolve, 800));
+          setOpened((prevOpened) =>
+            prevOpened.filter(
+              (index) => index !== tileIndex && index !== newOpened[1]
+            )
+          );
         }
       }
     }
   };
 
-  /*
-  for closed
-  
-  none is prevOpened
-  One is prevOpened
-  Two is prevOpened
-    
-  */
-
-  // FUNCTION TO HANDLE BUTTON PRESS
+  // FUNCTION TO HANDLE NEW GAME BUTTON PRESS
   const handleButtonPress = () => {
     // Set all images to hidden
     setOpened([]);
     setPaired([]);
-    setUnmatched([]);
+    // setTurns(0);
+    // setMatched(0);
     pairs = imagePairs();
   };
 
@@ -196,14 +194,3 @@ const styles = StyleSheet.create({
 export default GamePlot;
 
 // #E8AFFF neon purple for bg of opened tiles
-
-/*
-computing.png
-direct-memory-access.png
-grid.png
-micro-sd-card.png
-ram.png
-usb-stick.png
-hacker.png
-cloud.png
-*/

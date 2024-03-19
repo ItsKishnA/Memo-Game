@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderTopStartRadius: 7,
     borderTopEndRadius: 7,
+    //positioning at the end of the screen
+    position: "absolute",
+    bottom: 0,
   },
 
   line: {
@@ -37,7 +40,6 @@ const styles = StyleSheet.create({
   bullet: {
     fontSize: 10,
     color: "white",
-    textAlign: "center",
     textAlignVertical: "center",
   },
 });
