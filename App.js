@@ -9,7 +9,7 @@ export default function App() {
       <StatusBar style="light" />
       <View style={{ justifyContent: "center", alignContent: "center" }}>
         <View style={styles.line}></View>
-        <Text style={styles.text}>MEMO-GAME</Text>
+        <Text style={styles.text}>. . . MEMO-GAME . . .</Text>
         <View style={styles.line}></View>
         <GamePlot />
       </View>
