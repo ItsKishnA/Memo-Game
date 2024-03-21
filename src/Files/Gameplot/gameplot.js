@@ -94,7 +94,7 @@ const GamePlot = ({}) => {
     if (isMatched) {
       setMatched((prevMatched) => prevMatched + 1);
     }
-    if (matched === 3 && turns % 2 !== 0) {
+    if (matched === (rows * columns) / 2 - 1 && turns % 2 !== 0) {
       ToastAndroid.show("You Won!", ToastAndroid.SHORT);
       (async () => {
         await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -192,7 +192,11 @@ const GamePlot = ({}) => {
         style={styles.newGameButtonContainer}
         onPress={handleNewGame}
       >
-        <Text style={{ color: "white" }}>New Game</Text>
+        <Text
+          style={{ color: "white", fontFamily: "Pixelify-Sans", fontSize: 14 }}
+        >
+          New Game
+        </Text>
       </TouchableOpacity>
 
       {/* //Score Board */}
@@ -218,6 +222,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "#333",
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "column",
   },
 
   tileContainer: {
@@ -228,34 +233,32 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(100, 100, 100, 0.15)",
     borderRadius: 10,
     padding: 20,
-    margin: 10,
+    // margin: 10,
   },
 
   scoreBoard: {
     position: "absolute",
     alignItems: "center",
-    right: 40,
+    right: 25,
     bottom: 15,
     padding: 10,
 
     backgroundColor: "rgba(100, 100, 100, 0.25)",
     flexDirection: "column",
-    // border
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: "rgba(232, 175, 255, 0.3)",
   },
 
   scoreBoardElem: {
     color: "#E8AFFF",
-    fontSize: 14,
-    letterSpacing: 0.8,
+    fontSize: 15,
+    fontFamily: "Pixelify-Sans",
     marginTop: 5,
   },
 
   newGameButtonContainer: {
     position: "absolute",
     height: 50,
-    // width: 100,
     padding: 15,
     paddingHorizontal: 30,
 
@@ -267,7 +270,6 @@ const styles = StyleSheet.create({
     left: 25,
     justifyContent: "center",
     alignItems: "center",
-    // opacity: 0.0, // dissappear
   },
 
   tile: {

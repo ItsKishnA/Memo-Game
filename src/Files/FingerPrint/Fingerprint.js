@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#04d9ff",
     textAlign: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 15,
     textAlignVertical: "center",
     fontFamily: "Pixelify-Sans",
 
