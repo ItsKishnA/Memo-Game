@@ -162,3 +162,57 @@ usb-stick.png
 hacker.png
 cloud.png
 */
+
+/*
+  ../../Images/Tiles/tile-back-cover.png
+
+  ../../Images/Tiles/1.png
+  ../../Images/Tiles/2.png
+  ../../Images/Tiles/3.png
+  ../../Images/Tiles/4.png
+  ../../Images/Tiles/5.png
+  ../../Images/Tiles/6.png
+  ../../Images/Tiles/7.png
+  ../../Images/Tiles/8.png
+  
+  ../../Images/Tiles/Chinese/b.png
+  ../../Images/Tiles/Chinese/c.png
+  ../../Images/Tiles/Chinese/f.png
+  ../../Images/Tiles/Chinese/g.png
+  ../../Images/Tiles/Chinese/h.png
+  ../../Images/Tiles/Chinese/i.png
+  ../../Images/Tiles/Chinese/j.png
+  ../../Images/Tiles/Chinese/k.png
+  ../../Images/Tiles/Chinese/m.png
+  ../../Images/Tiles/Chinese/one.png
+  ../../Images/Tiles/Chinese/p.png
+  ../../Images/Tiles/Chinese/q.png
+  ../../Images/Tiles/Chinese/r.png
+  ../../Images/Tiles/Chinese/t.png
+  ../../Images/Tiles/Chinese/u.png
+  ../../Images/Tiles/Chinese/v.png
+  ../../Images/Tiles/Chinese/w.png
+  ../../Images/Tiles/Chinese/y.png
+  ../../Images/Tiles/Chinese/z.png
+
+  ../../Images/Tiles/Food/beer.png
+  ../../Images/Tiles/Food/birthday.png
+  ../../Images/Tiles/Food/biryani.png
+  ../../Images/Tiles/Food/burrito.png
+  ../../Images/Tiles/Food/cheers.png
+  ../../Images/Tiles/Food/cheese.png
+  ../../Images/Tiles/Food/fast-food.png
+  ../../Images/Tiles/Food/food-truck.png
+  ../../Images/Tiles/Food/fried-chicken.png
+  ../../Images/Tiles/Food/fruit.png
+  ../../Images/Tiles/Food/hamburger.png
+  ../../Images/Tiles/Food/ice-cream.png
+  ../../Images/Tiles/Food/noodle.png
+  ../../Images/Tiles/Food/pizza.png
+  ../../Images/Tiles/Food/smoothie.png
+  ../../Images/Tiles/Food/sufganiyot.png
+  ../../Images/Tiles/Food/taco.png
+
+
+
+*/

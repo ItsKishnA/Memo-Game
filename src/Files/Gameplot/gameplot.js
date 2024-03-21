@@ -6,6 +6,7 @@ import {
   ToastAndroid,
   Text,
   Button,
+  TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
 
@@ -16,33 +17,14 @@ const rows = 2,
 // ARRAY DATA
 const CardImages = [
   { image: require(`../../Images/Tiles/tile-back-cover.png`) },
-  // { image: require(`../../Images/Tiles/1.png`) },
-  // { image: require(`../../Images/Tiles/2.png`) },
-  // { image: require(`../../Images/Tiles/3.png`) },
-  // { image: require(`../../Images/Tiles/4.png`) },
-  // { image: require(`../../Images/Tiles/5.png`) },
-  // { image: require(`../../Images/Tiles/6.png`) },
-  // { image: require(`../../Images/Tiles/7.png`) },
-  // { image: require(`../../Images/Tiles/8.png`) },
-  { image: require(`../../Images/Tiles/Chinese/b.png`) },
-  { image: require(`../../Images/Tiles/Chinese/c.png`) },
-  { image: require(`../../Images/Tiles/Chinese/f.png`) },
-  { image: require(`../../Images/Tiles/Chinese/g.png`) },
-  { image: require(`../../Images/Tiles/Chinese/h.png`) },
-  { image: require(`../../Images/Tiles/Chinese/i.png`) },
-  { image: require(`../../Images/Tiles/Chinese/j.png`) },
-  { image: require(`../../Images/Tiles/Chinese/k.png`) },
-  { image: require(`../../Images/Tiles/Chinese/m.png`) },
-  { image: require(`../../Images/Tiles/Chinese/one.png`) },
-  { image: require(`../../Images/Tiles/Chinese/p.png`) },
-  { image: require(`../../Images/Tiles/Chinese/q.png`) },
-  { image: require(`../../Images/Tiles/Chinese/r.png`) },
-  { image: require(`../../Images/Tiles/Chinese/t.png`) },
-  { image: require(`../../Images/Tiles/Chinese/u.png`) },
-  { image: require(`../../Images/Tiles/Chinese/v.png`) },
-  { image: require(`../../Images/Tiles/Chinese/w.png`) },
-  { image: require(`../../Images/Tiles/Chinese/y.png`) },
-  { image: require(`../../Images/Tiles/Chinese/z.png`) },
+  { image: require(`../../Images/Tiles/1.png`) },
+  { image: require(`../../Images/Tiles/2.png`) },
+  { image: require(`../../Images/Tiles/3.png`) },
+  { image: require(`../../Images/Tiles/4.png`) },
+  { image: require(`../../Images/Tiles/5.png`) },
+  { image: require(`../../Images/Tiles/6.png`) },
+  { image: require(`../../Images/Tiles/7.png`) },
+  { image: require(`../../Images/Tiles/8.png`) },
 ];
 
 // FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
@@ -70,25 +52,31 @@ function imagePairs() {
 let pairs = imagePairs();
 
 const GamePlot = ({}) => {
+  // STATE TO KEEP TRACK OF OPENED AND PAIRED TILES
   const [opened, setOpened] = useState([]);
   const [paired, setPaired] = useState([]);
 
-  //TODO: Add turns and matched states
+  // STATE TO KEEP TRACK OF TURNS AND MATCHES
   const [turns, setTurns] = useState(0);
   const [matched, setMatched] = useState(0);
 
-  //FUNCTION TO HANDLE TURNS
-  const handleTurnNMatches = (matched) => {
+  //FUNCTION TO HANDLE TURNS AND MATCHES
+  const handleTurnNMatches = (isMatched) => {
     setTurns((prevTurns) => prevTurns + 1);
-    if (matched) {
+    if (isMatched) {
       setMatched((prevMatched) => prevMatched + 1);
     }
-    console.log("Turns: " + turns);
+    if (matched === 3 && turns % 2 !== 0) {
+      ToastAndroid.show("You Won!", ToastAndroid.SHORT);
+      (async () => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        handleButtonPress();
+      })();
+    }
   };
 
   // FUNCTION TO HANDLE TILE PRESS
   const handleClick = async (tileIndex, pairNo) => {
-    //CONDITION: Tile isn't opened
     // If no tile is opened other than paired ones, open the tile
     if (!opened.includes(tileIndex)) {
       // If no tile is opened
@@ -101,9 +89,8 @@ const GamePlot = ({}) => {
       else if (opened.length === paired.length + 1) {
         // If matches the opened tile, add to paired
         if (pairNo === pairs[opened[0]]) {
-          setPaired([opened[0], tileIndex, ...paired]);
-          setOpened([opened[0], tileIndex, ...paired]);
-          console.log("Matched");
+          setPaired([tileIndex, opened[0], ...paired]);
+          setOpened([tileIndex, opened[0], ...paired]);
           handleTurnNMatches(true);
         }
 
@@ -111,7 +98,6 @@ const GamePlot = ({}) => {
         else {
           const newOpened = [tileIndex, ...opened];
           setOpened(newOpened);
-          console.log("Not Matched");
           handleTurnNMatches(false);
           await new Promise((resolve) => setTimeout(resolve, 800));
           setOpened((prevOpened) =>
@@ -132,6 +118,7 @@ const GamePlot = ({}) => {
     //reset turns and matches
     setTurns(0);
     setMatched(0);
+    // Generate new pairs
     pairs = imagePairs();
   };
 
@@ -152,7 +139,7 @@ const GamePlot = ({}) => {
                       : CardImages[0].image;
 
                     return (
-                      <Pressable
+                      <TouchableOpacity
                         onPress={() => handleClick(tileIndex, pairs[tileIndex])}
                         key={tileIndex}
                       >
@@ -164,29 +151,33 @@ const GamePlot = ({}) => {
                           ]}
                           keyValue={pairs[tileIndex]}
                         />
-                      </Pressable>
+                      </TouchableOpacity>
                     );
                   })}
               </View>
             ))}
         </View>
-        <View style={{ margin: 10 }}>
-          <Button
-            title="New Game"
-            style={{
-              marginTop: 100,
-              borderRadius: 200,
-              padding: 10,
-              backgroundColor: "#007BFF",
-            }}
-            color={"green"}
-            onPress={handleButtonPress}
-          />
-        </View>
       </View>
+
+      {/* //New Game Button */}
+      <TouchableOpacity
+        style={[styles.newGameButtonContainer, styles.newGameButton]}
+        onPress={handleButtonPress}
+      >
+        <Text style={{ color: "white" }}>New Game</Text>
+      </TouchableOpacity>
+
+      {/* //Score Board */}
       <View style={styles.scoreBoard}>
         <Text style={styles.scoreBoardElem}>Turns: </Text>
-        <Text style={[styles.scoreBoardElem, { fontSize: 50 }]}>{turns}</Text>
+        <Text
+          style={[
+            styles.scoreBoardElem,
+            { fontSize: 60, fontWeight: 800, marginTop: -5 },
+          ]}
+        >
+          {turns}
+        </Text>
       </View>
     </View>
   );
@@ -205,22 +196,43 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    // transform: [{ translateX: -50 }, { translateY: -50 }],
+    backgroundColor: "rgba(200, 200, 200, 0.15)",
+    borderRadius: 5,
+    padding: 10,
   },
 
   scoreBoard: {
     position: "absolute",
     alignItems: "center",
-    bottom: 100,
+    bottom: 125,
     padding: 10,
-    backgroundColor: "#333",
+    backgroundColor: "rgba(100, 100, 100, 0.4)",
     flexDirection: "column",
     borderRadius: 5,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: "rgba(232, 175, 255, 0.3)",
   },
 
   scoreBoardElem: {
     color: "#E8AFFF",
     fontSize: 15,
+    marginTop: 5,
+  },
+
+  newGameButtonContainer: {
+    position: "absolute",
+    bottom: 35,
+    right: 10,
+  },
+
+  newGameButton: {
+    backgroundColor: "#007BFF",
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   tileContainer: {
@@ -253,48 +265,3 @@ const styles = StyleSheet.create({
 export default GamePlot;
 
 // #E8AFFF neon purple for bg of opened tiles
-
-/*
-  ../../Images/Tiles/tile-back-cover.png
-  
-  ../../Images/Tiles/Chinese/b.png
-  ../../Images/Tiles/Chinese/c.png
-  ../../Images/Tiles/Chinese/f.png
-  ../../Images/Tiles/Chinese/g.png
-  ../../Images/Tiles/Chinese/h.png
-  ../../Images/Tiles/Chinese/i.png
-  ../../Images/Tiles/Chinese/j.png
-  ../../Images/Tiles/Chinese/k.png
-  ../../Images/Tiles/Chinese/m.png
-  ../../Images/Tiles/Chinese/one.png
-  ../../Images/Tiles/Chinese/p.png
-  ../../Images/Tiles/Chinese/q.png
-  ../../Images/Tiles/Chinese/r.png
-  ../../Images/Tiles/Chinese/t.png
-  ../../Images/Tiles/Chinese/u.png
-  ../../Images/Tiles/Chinese/v.png
-  ../../Images/Tiles/Chinese/w.png
-  ../../Images/Tiles/Chinese/y.png
-  ../../Images/Tiles/Chinese/z.png
-
-  ../../Images/Tiles/Food/beer.png
-  ../../Images/Tiles/Food/birthday.png
-  ../../Images/Tiles/Food/biryani.png
-  ../../Images/Tiles/Food/burrito.png
-  ../../Images/Tiles/Food/cheers.png
-  ../../Images/Tiles/Food/cheese.png
-  ../../Images/Tiles/Food/fast-food.png
-  ../../Images/Tiles/Food/food-truck.png
-  ../../Images/Tiles/Food/fried-chicken.png
-  ../../Images/Tiles/Food/fruit.png
-  ../../Images/Tiles/Food/hamburger.png
-  ../../Images/Tiles/Food/ice-cream.png
-  ../../Images/Tiles/Food/noodle.png
-  ../../Images/Tiles/Food/pizza.png
-  ../../Images/Tiles/Food/smoothie.png
-  ../../Images/Tiles/Food/sufganiyot.png
-  ../../Images/Tiles/Food/taco.png
-
-
-
-*/
