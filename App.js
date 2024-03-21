@@ -1,4 +1,4 @@
-// import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, SafeAreaView, View } from "react-native";
 import GamePlot from "./src/Files/Gameplot/gameplot";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
@@ -11,6 +11,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar hidden={true} />
       <View style={styles.gameplot}>
         <Text style={styles.text}>. . . MEMO-GAME . . .</Text>
         <GamePlot />
@@ -24,30 +25,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0c0c0c",
-    // alignItems: "center",
-    // justifyContent: "center",
-    // margin: 0,
-    // padding: 0,
+    flexDirection: "column",
   },
 
   gameplot: {
     padding: 0,
     margin: 0,
+    // flex: 1,
     justifyContent: "center",
     alignContent: "center",
     height: "100%",
     // backgroundColor: "#333",
+    paddingBottom: 50,
     // top: 0,
   },
 
   text: {
+    position: "relative",
+    top: 20,
     fontSize: 30,
-    // fontSize: Dimensions.get("window").width * 0.05,
     fontFamily: "Pixelify-Sans",
     color: "aqua",
-    padding: 10,
-    marginTop: 50,
+    // padding: 10,
+    // marginTop: 30,
     textAlign: "center",
-    alignContent: "center",
   },
 });

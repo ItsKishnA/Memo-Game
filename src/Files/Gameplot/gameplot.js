@@ -2,29 +2,52 @@ import {
   View,
   StyleSheet,
   Image,
-  Pressable,
   ToastAndroid,
   Text,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
+import { useFonts } from "expo-font";
 
-const rows = 2,
+const rows = 3,
   columns = 4;
 
 // TODO: Add more images to game
 // ARRAY DATA
 const CardImages = [
   { image: require(`../../Images/Tiles/tile-back-cover.png`) },
-  { image: require(`../../Images/Tiles/1.png`) },
-  { image: require(`../../Images/Tiles/2.png`) },
-  { image: require(`../../Images/Tiles/3.png`) },
-  { image: require(`../../Images/Tiles/4.png`) },
-  { image: require(`../../Images/Tiles/5.png`) },
-  { image: require(`../../Images/Tiles/6.png`) },
-  { image: require(`../../Images/Tiles/7.png`) },
-  { image: require(`../../Images/Tiles/8.png`) },
+  // { image: require(`../../Images/Tiles/1.png`) },
+  // { image: require(`../../Images/Tiles/2.png`) },
+  // { image: require(`../../Images/Tiles/3.png`) },
+  // { image: require(`../../Images/Tiles/4.png`) },
+  // { image: require(`../../Images/Tiles/5.png`) },
+  // { image: require(`../../Images/Tiles/6.png`) },
+  // { image: require(`../../Images/Tiles/7.png`) },
+  // { image: require(`../../Images/Tiles/8.png`) },
+
+  { image: require(`../../Images/Tiles/Chinese/b.png`) },
+  { image: require(`../../Images/Tiles/Chinese/c.png`) },
+  { image: require(`../../Images/Tiles/Chinese/f.png`) },
+  { image: require(`../../Images/Tiles/Chinese/g.png`) },
+
+  { image: require(`../../Images/Tiles/Chinese/h.png`) },
+  { image: require(`../../Images/Tiles/Chinese/i.png`) },
+  { image: require(`../../Images/Tiles/Chinese/j.png`) },
+  { image: require(`../../Images/Tiles/Chinese/k.png`) },
+
+  { image: require(`../../Images/Tiles/Chinese/m.png`) },
+  { image: require(`../../Images/Tiles/Chinese/one.png`) },
+  { image: require(`../../Images/Tiles/Chinese/p.png`) },
+  { image: require(`../../Images/Tiles/Chinese/q.png`) },
+
+  { image: require(`../../Images/Tiles/Chinese/r.png`) },
+  { image: require(`../../Images/Tiles/Chinese/t.png`) },
+  { image: require(`../../Images/Tiles/Chinese/u.png`) },
+  { image: require(`../../Images/Tiles/Chinese/v.png`) },
+
+  { image: require(`../../Images/Tiles/Chinese/w.png`) },
+  { image: require(`../../Images/Tiles/Chinese/y.png`) },
+  { image: require(`../../Images/Tiles/Chinese/z.png`) },
 ];
 
 // FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
@@ -52,6 +75,11 @@ function imagePairs() {
 let pairs = imagePairs();
 
 const GamePlot = ({}) => {
+  // Loading custom font
+  let [fontsLoaded] = useFonts({
+    "Pixelify-Sans": require("../../fonts/PixelifySans-VariableFont_wght.ttf"),
+  });
+
   // STATE TO KEEP TRACK OF OPENED AND PAIRED TILES
   const [opened, setOpened] = useState([]);
   const [paired, setPaired] = useState([]);
@@ -70,13 +98,13 @@ const GamePlot = ({}) => {
       ToastAndroid.show("You Won!", ToastAndroid.SHORT);
       (async () => {
         await new Promise((resolve) => setTimeout(resolve, 3000));
-        handleButtonPress();
+        handleNewGame();
       })();
     }
   };
 
   // FUNCTION TO HANDLE TILE PRESS
-  const handleClick = async (tileIndex, pairNo) => {
+  const handleTileClick = async (tileIndex, pairNo) => {
     // If no tile is opened other than paired ones, open the tile
     if (!opened.includes(tileIndex)) {
       // If no tile is opened
@@ -111,7 +139,7 @@ const GamePlot = ({}) => {
   };
 
   // FUNCTION TO HANDLE NEW GAME BUTTON PRESS
-  const handleButtonPress = () => {
+  const handleNewGame = () => {
     // Set all images to hidden
     setOpened([]);
     setPaired([]);
@@ -123,46 +151,46 @@ const GamePlot = ({}) => {
   };
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.gridContainer}>
-        <View style={styles.tileContainer}>
-          {Array(rows) // row=2
-            .fill()
-            .map((_, i) => (
-              <View key={i} style={styles.eachLine}>
-                {Array(columns) // column=4
-                  .fill()
-                  .map((_, j) => {
-                    const tileIndex = columns * i + j; // column=4 * i + j
-                    const source = opened.includes(tileIndex)
-                      ? CardImages[pairs[tileIndex]].image
-                      : CardImages[0].image;
+    <View style={styles.gameplot}>
+      <View style={styles.tileContainer}>
+        {Array(rows) // row=2
+          .fill()
+          .map((_, i) => (
+            <View key={i} style={styles.eachLineOfTileContainer}>
+              {Array(columns) // column=4
+                .fill()
+                .map((_, j) => {
+                  const tileIndex = columns * i + j; // column=4 * i + j
+                  const source = opened.includes(tileIndex)
+                    ? CardImages[pairs[tileIndex]].image
+                    : CardImages[0].image;
 
-                    return (
-                      <TouchableOpacity
-                        onPress={() => handleClick(tileIndex, pairs[tileIndex])}
-                        key={tileIndex}
-                      >
-                        <Image
-                          source={source}
-                          style={[
-                            styles.tile,
-                            source === CardImages[0].image && styles.otherStyle,
-                          ]}
-                          keyValue={pairs[tileIndex]}
-                        />
-                      </TouchableOpacity>
-                    );
-                  })}
-              </View>
-            ))}
-        </View>
+                  return (
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleTileClick(tileIndex, pairs[tileIndex])
+                      }
+                      key={tileIndex}
+                    >
+                      <Image
+                        source={source}
+                        style={[
+                          styles.tile,
+                          source === CardImages[0].image && styles.otherStyle,
+                        ]}
+                        keyValue={pairs[tileIndex]}
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
+            </View>
+          ))}
       </View>
 
       {/* //New Game Button */}
       <TouchableOpacity
-        style={[styles.newGameButtonContainer, styles.newGameButton]}
-        onPress={handleButtonPress}
+        style={styles.newGameButtonContainer}
+        onPress={handleNewGame}
       >
         <Text style={{ color: "white" }}>New Game</Text>
       </TouchableOpacity>
@@ -173,7 +201,7 @@ const GamePlot = ({}) => {
         <Text
           style={[
             styles.scoreBoardElem,
-            { fontSize: 60, fontWeight: 800, marginTop: -5 },
+            { fontSize: 60, fontWeight: 800, marginTop: -10 },
           ]}
         >
           {turns}
@@ -185,73 +213,76 @@ const GamePlot = ({}) => {
 
 // STYLESHEET
 const styles = StyleSheet.create({
-  screen: {
+  gameplot: {
     flex: 1,
     // backgroundColor: "#333",
     alignItems: "center",
     justifyContent: "center",
   },
 
-  gridContainer: {
+  tileContainer: {
     position: "absolute",
+    // flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(200, 200, 200, 0.15)",
-    borderRadius: 5,
-    padding: 10,
+    backgroundColor: "rgba(100, 100, 100, 0.15)",
+    borderRadius: 10,
+    padding: 20,
+    margin: 10,
   },
 
   scoreBoard: {
     position: "absolute",
     alignItems: "center",
-    bottom: 125,
+    right: 40,
+    bottom: 15,
     padding: 10,
-    backgroundColor: "rgba(100, 100, 100, 0.4)",
+
+    backgroundColor: "rgba(100, 100, 100, 0.25)",
     flexDirection: "column",
+    // border
     borderRadius: 5,
-    borderLeftWidth: 2,
-    borderBottomWidth: 2,
     borderColor: "rgba(232, 175, 255, 0.3)",
   },
 
   scoreBoardElem: {
     color: "#E8AFFF",
-    fontSize: 15,
+    fontSize: 14,
+    letterSpacing: 0.8,
     marginTop: 5,
   },
 
   newGameButtonContainer: {
     position: "absolute",
-    bottom: 35,
-    right: 10,
-  },
-
-  newGameButton: {
-    backgroundColor: "#007BFF",
+    height: 50,
+    // width: 100,
     padding: 15,
-    borderRadius: 5,
-    marginTop: 10,
+    paddingHorizontal: 30,
+
+    borderRadius: 25,
+    borderColor: "pink",
+    borderWidth: 2,
+
+    bottom: 15,
+    left: 25,
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  tileContainer: {
-    margin: 10,
+    // opacity: 0.0, // dissappear
   },
 
   tile: {
     width: 65,
     height: 65,
-    margin: 5,
+    margin: 8,
   },
 
-  eachLine: {
+  eachLineOfTileContainer: {
     flexDirection: "row",
   },
 
   otherStyle: {
     tintColor: "aqua",
-    opacity: 0.8,
+    opacity: 0.6,
   },
 
   button: {
