@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFonts } from "expo-font";
 
 const rows = 3,
@@ -77,7 +77,7 @@ let pairs = imagePairs();
 const GamePlot = ({}) => {
   // Loading custom font
   let [fontsLoaded] = useFonts({
-    "Pixelify-Sans": require("../../fonts/PixelifySans-VariableFont_wght.ttf"),
+    "Pixelify-Sans": require("../../fonts/static/PixelifySans-Regular.ttf"),
   });
 
   // STATE TO KEEP TRACK OF OPENED AND PAIRED TILES
