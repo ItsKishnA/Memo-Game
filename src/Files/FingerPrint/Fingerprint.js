@@ -1,11 +1,6 @@
 import { View, StyleSheet, Text } from "react-native";
-import { useFonts } from "expo-font";
 
 const Fingerprint = () => {
-  let [fontsLoaded] = useFonts({
-    "Pixelify-Sans": require("../../fonts/PixelifySans-VariableFont_wght.ttf"),
-  });
-
   return (
     <View style={styles.container}>
       <View style={styles.line}></View>
@@ -42,8 +37,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 15,
     textAlignVertical: "center",
-    fontFamily: "Pixelify-Sans",
-
+    fontWeight: "bold",
     // backgroundColor: "white",
   },
   bullet: {

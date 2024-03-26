@@ -8,50 +8,56 @@ import {
   TouchableOpacity,
 } from "react-native";
 import GamePlot from "./src/Files/Gameplot/gameplot";
+import NewTab from "./src/Files/NewTab/NewTab";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
 import { useFonts } from "expo-font";
-// import AppLoading from "expo-app-loading";
 import NavBar from "./src/Files/NavBar/NavBar.js";
 import { useState } from "react";
 import menuIcon from "./src/Icons/menu.png";
 //TODO : Add splash screen to minmize the loading time
 
 export default function App() {
-  const [title, setTitle] = useState("Memo-Game");
-
   let [fontsLoaded] = useFonts({
     "Pixelify-Sans": require("./src/fonts/static/PixelifySans-Regular.ttf"),
   });
 
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
-      {/* <NavBar title={title}> */}
-      <TouchableOpacity>
-        <Image
-          source={menuIcon}
+      <NavBar tab={"Memo-Game"} />
+
+      {/* Menu Icon */}
+      {/* <View style={styles.gameplot}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("pressed");
+          }}
           style={{
+            // Add these styles to the TouchableOpacity
             height: 50,
             width: 50,
             position: "absolute",
             top: 5,
-            left: 5,
-            // backgroundColor: "rgba(100, 100, 100, 0.9)",
+            left: 10,
             margin: 10,
             padding: 10,
-            opacity: 0.8,
+            zIndex: 1,
           }}
-        />
-      </TouchableOpacity>
-      <View style={styles.gameplot}>
+        >
+          <Image
+            source={menuIcon}
+            style={{
+              // Remove these styles from the Image
+              height: "100%",
+              width: "100%",
+              opacity: 0.8,
+            }}
+          />
+        </TouchableOpacity>
         <Text style={styles.text}>. . . MEMO-GAME . . .</Text>
         <GamePlot />
-      </View>
-      {/* </NavBar> */}
+      </View> */}
+      <NewTab />
       <Fingerprint />
     </SafeAreaView>
   );
@@ -65,15 +71,18 @@ const styles = StyleSheet.create({
   },
 
   gameplot: {
+    position: "absolute",
     padding: 0,
     margin: 0,
     // flex: 1,
     justifyContent: "center",
     alignContent: "center",
     height: "100%",
-    // backgroundColor: "#333",
+    width: "100%",
+    backgroundColor: "#333",
     paddingBottom: 50,
     // top: 0,
+    left: 0,
   },
 
   text: {
@@ -88,5 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// expo-app-loading Installed
 // expo-font Installed
