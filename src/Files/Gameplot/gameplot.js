@@ -5,9 +5,10 @@ import {
   ToastAndroid,
   Text,
   TouchableOpacity,
+  // Animated,
 } from "react-native";
-import { useState } from "react";
-import { useFonts } from "expo-font";
+import { useState, useEffect } from "react";
+// import { useFonts } from "expo-font";
 
 const rows = 3,
   columns = 4;
@@ -51,7 +52,7 @@ const CardImages = [
 ];
 
 // FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
-function imagePairs() {
+const imagePairs = () => {
   const numPairs = (rows * columns) / 2;
   const indices = new Set();
 
@@ -70,15 +71,15 @@ function imagePairs() {
   }
   console.log("Pairs are : " + pairs);
   return pairs;
-}
+};
 
 let pairs = imagePairs();
 
-const GamePlot = ({}) => {
+const GamePlot = () => {
   // Loading custom font
-  let [fontsLoaded] = useFonts({
-    "Pixelify-Sans": require("../../fonts/static/PixelifySans-Regular.ttf"),
-  });
+  // let [fontsLoaded] = useFonts({
+  //   "Pixelify-Sans": require("../../fonts/static/PixelifySans-Regular.ttf"),
+  // });
 
   // STATE TO KEEP TRACK OF OPENED AND PAIRED TILES
   const [opened, setOpened] = useState([]);
@@ -91,9 +92,11 @@ const GamePlot = ({}) => {
   //FUNCTION TO HANDLE TURNS AND MATCHES
   const handleTurnNMatches = (isMatched) => {
     setTurns((prevTurns) => prevTurns + 1);
+
     if (isMatched) {
       setMatched((prevMatched) => prevMatched + 1);
     }
+
     if (matched === (rows * columns) / 2 - 1 && turns % 2 !== 0) {
       ToastAndroid.show("You Won!", ToastAndroid.SHORT);
       (async () => {
@@ -193,7 +196,11 @@ const GamePlot = ({}) => {
         onPress={handleNewGame}
       >
         <Text
-          style={{ color: "white", fontFamily: "Pixelify-Sans", fontSize: 14 }}
+          style={{
+            color: "white",
+            // fontFamily: "Pixelify-Sans",
+            fontSize: 14,
+          }}
         >
           New Game
         </Text>
@@ -206,6 +213,7 @@ const GamePlot = ({}) => {
           style={[
             styles.scoreBoardElem,
             { fontSize: 60, fontWeight: 800, marginTop: -10 },
+            // { transform: [{ translateY: scrollAnim }] },
           ]}
         >
           {turns}
@@ -252,7 +260,7 @@ const styles = StyleSheet.create({
   scoreBoardElem: {
     color: "#E8AFFF",
     fontSize: 15,
-    fontFamily: "Pixelify-Sans",
+    // fontFamily: "Pixelify-Sans",
     marginTop: 5,
   },
 
@@ -273,8 +281,8 @@ const styles = StyleSheet.create({
   },
 
   tile: {
-    width: 65,
-    height: 65,
+    width: 60,
+    height: 60,
     margin: 8,
   },
 
@@ -285,13 +293,6 @@ const styles = StyleSheet.create({
   otherStyle: {
     tintColor: "aqua",
     opacity: 0.6,
-  },
-
-  button: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    marginTop: 40,
-    borderRadius: 10,
   },
 });
 

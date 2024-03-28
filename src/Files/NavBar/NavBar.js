@@ -1,4 +1,11 @@
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  // Animated,
+} from "react-native";
 import profileIcon from "../../Icons/user.png";
 import memoGameIcon from "../../Icons/mahjong.png";
 import musicIcon from "../../Icons/music.png";
@@ -62,7 +69,7 @@ const NavBar = (props) => {
           source={memoGameIcon}
           text={title[0]}
           style={{
-            backgroundColor: currentTab === title[0] ? "gray" : "transparent",
+            backgroundColor: currentTab === title[0] ? "#222" : "transparent",
             borderColor: currentTab === title[0] ? null : "white",
             borderWidth: currentTab === title[0] ? 0 : 1,
           }}
@@ -73,7 +80,7 @@ const NavBar = (props) => {
           source={memoGameIcon}
           text={title[1]}
           style={{
-            backgroundColor: currentTab === title[1] ? "gray" : "transparent",
+            backgroundColor: currentTab === title[1] ? "#222" : "transparent",
             borderColor: currentTab === title[1] ? null : "white",
             borderWidth: currentTab === title[1] ? 0 : 1,
           }}
@@ -88,7 +95,7 @@ const NavBar = (props) => {
           padding={0}
           paddingRight={0}
           style={{
-            backgroundColor: sound ? "gray" : "transparent",
+            backgroundColor: sound ? "#222" : "transparent",
           }}
         />
         <NavElement
@@ -97,7 +104,7 @@ const NavBar = (props) => {
           padding={0}
           paddingRight={0}
           style={{
-            backgroundColor: music ? "gray" : "transparent",
+            backgroundColor: music ? "#222" : "transparent",
           }}
         />
       </View>
@@ -122,7 +129,7 @@ const styles = StyleSheet.create({
   navElem: {
     alignSelf: "baseline",
     flexDirection: "row",
-    backgroundColor: "gray",
+    backgroundColor: "#222",
     borderRadius: 8,
     padding: 10,
     margin: 10,
@@ -130,10 +137,11 @@ const styles = StyleSheet.create({
   },
 
   navBar: {
-    backgroundColor: "black",
+    backgroundColor: "transparent",
     flex: 1,
     padding: 10,
     margin: 10,
+    paddingBottom: 30,
   },
 });
 

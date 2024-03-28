@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#0091ab",
-    margin: 10,
+    margin: 15,
     marginRight: 5,
   },
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 15,
     textAlignVertical: "center",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     // backgroundColor: "white",
   },
   bullet: {
