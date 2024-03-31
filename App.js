@@ -9,17 +9,17 @@ import {
   Animated,
 } from "react-native";
 import MemoGame from "./src/Files/Gameplot/gameplot";
-import SimonSays from "./src/Files/NewTab/NewTab";
+// import SimonSays from "./src/Files/SimonSays/SimonSays.js";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
 import NavBar from "./src/Files/NavBar/NavBar.js";
 import { useState, useRef } from "react";
 import menuIcon from "./src/Icons/menu.png";
 import closeIcon from "./src/Icons/close.png";
-//TODO : Add splash screen to minmize the loading time
+//TODO : Add splash screen to minmize the loading time of fonts
 
 export default function App() {
   const [showMenu, setShowMenu] = useState(false);
-  const [currentTab, setCurrentTab] = useState("Memo-Game"); // ["Memo-Game", "Simon-Game"
+  const [currentTab, setCurrentTab] = useState("Memo-Game");
 
   // Animated Properties...
   const offsetValue = useRef(new Animated.Value(0)).current;
@@ -54,7 +54,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="white" />
+      <StatusBar style="light" />
 
       <NavBar tab={"Memo-Game"} onTabChange={(tab) => setCurrentTab(tab)} />
       <Animated.View
@@ -65,7 +65,7 @@ export default function App() {
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           },
         ]}
-        pointerEvents="box-none"
+        // pointerEvents="box-none"
       >
         {/* Menu Icon */}
         <Animated.View
@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
 });
 
 // expo-font Installed
-// react-native-sound Installed
 
 // import { useFonts } from "expo-font";
 

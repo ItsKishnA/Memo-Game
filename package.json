@@ -9,13 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@unimodules/react-native-adapter": "^6.3.9",
     "expo": "~50.0.6",
-    "expo-font": "^11.10.3",
+    "expo-av": "^13.10.5",
+    "expo-font": "~11.10.3",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
-    "react-native": "0.73.5",
-    "react-native-sound": "^0.11.2",
-    "react-native-sound-player": "^0.13.2"
+    "react-native": "0.73.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

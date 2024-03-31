@@ -5,7 +5,6 @@ import {
   ToastAndroid,
   Text,
   TouchableOpacity,
-  // Animated,
 } from "react-native";
 import { useState, useEffect } from "react";
 // import { useFonts } from "expo-font";

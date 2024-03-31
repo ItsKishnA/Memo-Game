@@ -1,31 +1,95 @@
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  Button,
+} from "react-native";
 import profileIcon from "../../Icons/user.png";
 import memoGameIcon from "../../../assets/MemoGameIcon-WithoutBG.png";
 import musicIcon from "../../Icons/music.png";
 import soundIcon from "../../Icons/audio-waves.png";
 import settingIcon from "../../Icons/setting.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Audio } from "expo-av";
 
 const NavBar = (props) => {
   const [currentTab, setCurrentTab] = useState(props.tab);
   const [music, setMusic] = useState(true);
   const [sound, setSound] = useState(true);
 
+  const [musicObject, setMusicObject] = useState(null);
+  const [soundObject, setSoundObject] = useState(null);
+  useEffect(() => {
+    const loadMusic = async () => {
+      const _musicObject = new Audio.Sound();
+      await _musicObject.loadAsync(
+        require("../../../src/Sounds/Automation.mp3")
+      );
+      setMusicObject(_musicObject);
+      await _musicObject.setVolumeAsync(0.4);
+      await _musicObject.setIsLoopingAsync(true);
+      await _musicObject.playAsync();
+    };
+
+    const loadSound = async () => {
+      const _soundObject = new Audio.Sound();
+      await _soundObject.loadAsync(require("../../../src/Sounds/onClick.wav"));
+      setSoundObject(_soundObject);
+      await _soundObject.setVolumeAsync(0.4);
+    };
+
+    loadSound();
+    loadMusic();
+  }, []);
+
   const title = ["Memo-Game", "Simon-Says"];
 
-  const handleClick = (id, tab) => {
-    if (tab) {
-      if (currentTab === title[id]) return;
-      else {
-        setCurrentTab(title[id]);
-        props.onTabChange(title[id]);
+  const playMusic = async () => {
+    try {
+      await musicObject?.playAsync();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const pauseMusic = async () => {
+    try {
+      await musicObject.pauseAsync();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleClick = async (id, tab) => {
+    if (sound) {
+      try {
+        await soundObject.replayAsync();
+      } catch (error) {
+        console.log(error);
       }
+    }
+    if (id >= 4) {
+      // if (currentTab === title[id]) return;
+      // else {
+      // setCurrentTab(title[id]);
+      // props.onTabChange(title[id]);
+      // }
+      return;
     } else {
-      if (id === 2) {
-        setMusic(!music);
-      }
-      if (id === 1) {
+      if (id === 0) {
+        console.log("Profile");
+      } else if (id === 1) {
         setSound(!sound);
+      } else if (id === 2) {
+        if (music) {
+          await pauseMusic();
+        } else {
+          await playMusic();
+        }
+        setMusic(!music);
+      } else if (id === 3) {
+        console.log("Settings");
       }
     }
   };
@@ -66,7 +130,7 @@ const NavBar = (props) => {
       <View style={{ flex: 1, justifyContent: "center" }}>
         <NavElement
           element={true}
-          id={0}
+          id={4}
           source={memoGameIcon}
           // text={title[0]}
           size={110}
