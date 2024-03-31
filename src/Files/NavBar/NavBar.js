@@ -1,13 +1,6 @@
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  // Animated,
-} from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import profileIcon from "../../Icons/user.png";
-import memoGameIcon from "../../Icons/mahjong.png";
+import memoGameIcon from "../../../assets/MemoGameIcon-WithoutBG.png";
 import musicIcon from "../../Icons/music.png";
 import soundIcon from "../../Icons/audio-waves.png";
 import settingIcon from "../../Icons/setting.png";
@@ -18,11 +11,15 @@ const NavBar = (props) => {
   const [music, setMusic] = useState(true);
   const [sound, setSound] = useState(true);
 
-  const title = ["Memo-Game", "Simon-Game"];
+  const title = ["Memo-Game", "Simon-Says"];
 
-  const handleClick = (id, element) => {
-    if (element) {
-      setCurrentTab(title[id]);
+  const handleClick = (id, tab) => {
+    if (tab) {
+      if (currentTab === title[id]) return;
+      else {
+        setCurrentTab(title[id]);
+        props.onTabChange(title[id]);
+      }
     } else {
       if (id === 2) {
         setMusic(!music);
@@ -42,12 +39,16 @@ const NavBar = (props) => {
     id,
     element = false,
     style = {},
+    size = 35,
   }) => (
     <TouchableOpacity
       style={[styles.navElem, style]}
       onPress={() => handleClick(id, element)}
     >
-      <Image source={source} style={styles.icon} />
+      <Image
+        source={source}
+        style={[styles.icon, { height: size, width: size }]}
+      />
       <View style={{ justifyContent: "center" }}>
         <Text style={{ fontSize, padding, paddingRight, color: "darkgray" }}>
           {text}
@@ -67,14 +68,21 @@ const NavBar = (props) => {
           element={true}
           id={0}
           source={memoGameIcon}
-          text={title[0]}
+          // text={title[0]}
+          size={110}
+          padding={0}
+          paddingRight={0}
           style={{
-            backgroundColor: currentTab === title[0] ? "#222" : "transparent",
+            backgroundColor:
+              currentTab === title[0]
+                ? "rgba(100, 100, 100, 0.25)"
+                : "transparent",
             borderColor: currentTab === title[0] ? null : "white",
             borderWidth: currentTab === title[0] ? 0 : 1,
+            // width: 100,
           }}
         />
-        <NavElement
+        {/* <NavElement
           element={true}
           id={1}
           source={memoGameIcon}
@@ -84,7 +92,7 @@ const NavBar = (props) => {
             borderColor: currentTab === title[1] ? null : "white",
             borderWidth: currentTab === title[1] ? 0 : 1,
           }}
-        />
+        /> */}
       </View>
 
       {/* Sound & Music */}
@@ -95,7 +103,9 @@ const NavBar = (props) => {
           padding={0}
           paddingRight={0}
           style={{
-            backgroundColor: sound ? "#222" : "transparent",
+            backgroundColor: sound
+              ? "rgba(100, 100, 100, 0.25)"
+              : "transparent",
           }}
         />
         <NavElement
@@ -104,7 +114,9 @@ const NavBar = (props) => {
           padding={0}
           paddingRight={0}
           style={{
-            backgroundColor: music ? "#222" : "transparent",
+            backgroundColor: music
+              ? "rgba(100, 100, 100, 0.25)"
+              : "transparent",
           }}
         />
       </View>
@@ -129,8 +141,8 @@ const styles = StyleSheet.create({
   navElem: {
     alignSelf: "baseline",
     flexDirection: "row",
-    backgroundColor: "#222",
-    borderRadius: 8,
+    backgroundColor: "rgba(100, 100, 100, 0.25)",
+    borderRadius: 25,
     padding: 10,
     margin: 10,
     paddingRight: 10,

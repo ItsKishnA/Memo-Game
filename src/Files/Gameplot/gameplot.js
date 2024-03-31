@@ -155,6 +155,7 @@ const GamePlot = () => {
 
   return (
     <View style={styles.gameplot}>
+      <Text style={styles.text}>Memo-Game</Text>
       <View style={styles.tileContainer}>
         {Array(rows) // row=2
           .fill()
@@ -189,7 +190,6 @@ const GamePlot = () => {
             </View>
           ))}
       </View>
-
       {/* //New Game Button */}
       <TouchableOpacity
         style={styles.newGameButtonContainer}
@@ -200,12 +200,15 @@ const GamePlot = () => {
             color: "white",
             // fontFamily: "Pixelify-Sans",
             fontSize: 14,
+            // textAlign: "center",
+            // alignContent: "center",
+            // justifyContent: "center",
+            // alignItems: "center",
           }}
         >
           New Game
         </Text>
       </TouchableOpacity>
-
       {/* //Score Board */}
       <View style={styles.scoreBoard}>
         <Text style={styles.scoreBoardElem}>Turns: </Text>
@@ -230,6 +233,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "#333",
     alignItems: "center",
     justifyContent: "center",
+    zIndex: -1,
     flexDirection: "column",
   },
 
@@ -239,9 +243,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgba(100, 100, 100, 0.15)",
+    // backgroundColor: "rgba(5, 238, 255, 0.15)",
+    borderColor: "rgba(255, 255, 255, 0.09)",
+    borderWidth: 1,
+    // opacity:
     borderRadius: 10,
     padding: 20,
     // margin: 10,
+  },
+
+  text: {
+    position: "absolute",
+    top: 20,
+    fontSize: 32,
+    fontWeight: "900",
+    letterSpacing: 0.8,
+    color: "white",
+    textAlign: "center",
   },
 
   scoreBoard: {
@@ -258,7 +276,8 @@ const styles = StyleSheet.create({
   },
 
   scoreBoardElem: {
-    color: "#E8AFFF",
+    // color: "#E8AFFF",
+    color: "#fcadd8",
     fontSize: 15,
     // fontFamily: "Pixelify-Sans",
     marginTop: 5,
@@ -267,11 +286,11 @@ const styles = StyleSheet.create({
   newGameButtonContainer: {
     position: "absolute",
     height: 50,
-    padding: 15,
+    padding: 10,
     paddingHorizontal: 30,
 
     borderRadius: 25,
-    borderColor: "pink",
+    borderColor: "#05eeff",
     borderWidth: 2,
 
     bottom: 15,
@@ -291,8 +310,10 @@ const styles = StyleSheet.create({
   },
 
   otherStyle: {
-    tintColor: "aqua",
-    opacity: 0.6,
+    tintColor: "rgba(211, 227, 253, 0.9)",
+    // tintColor: "white",
+    tintColor: "#EEEEEE",
+    opacity: 1,
   },
 });
 
