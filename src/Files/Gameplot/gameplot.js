@@ -7,23 +7,26 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
+import { Audio } from "expo-av";
 // import { useFonts } from "expo-font";
 
 const rows = 3,
   columns = 4;
 
 // TODO: Add more images to game
+
 // ARRAY DATA
+// { image: require(`../../Images/Tiles/1.png`) },
+// { image: require(`../../Images/Tiles/2.png`) },
+// { image: require(`../../Images/Tiles/3.png`) },
+// { image: require(`../../Images/Tiles/4.png`) },
+// { image: require(`../../Images/Tiles/5.png`) },
+// { image: require(`../../Images/Tiles/6.png`) },
+// { image: require(`../../Images/Tiles/7.png`) },
+// { image: require(`../../Images/Tiles/8.png`) },
+
 const CardImages = [
   { image: require(`../../Images/Tiles/tile-back-cover.png`) },
-  // { image: require(`../../Images/Tiles/1.png`) },
-  // { image: require(`../../Images/Tiles/2.png`) },
-  // { image: require(`../../Images/Tiles/3.png`) },
-  // { image: require(`../../Images/Tiles/4.png`) },
-  // { image: require(`../../Images/Tiles/5.png`) },
-  // { image: require(`../../Images/Tiles/6.png`) },
-  // { image: require(`../../Images/Tiles/7.png`) },
-  // { image: require(`../../Images/Tiles/8.png`) },
 
   { image: require(`../../Images/Tiles/Chinese/b.png`) },
   { image: require(`../../Images/Tiles/Chinese/c.png`) },
@@ -51,7 +54,7 @@ const CardImages = [
 ];
 
 // FUNCTION TO GENERATE PAIRS OF IMAGE INDEX B/W 1 TO 8
-const imagePairs = () => {
+const generateImagePairs = () => {
   const numPairs = (rows * columns) / 2;
   const indices = new Set();
 
@@ -72,21 +75,31 @@ const imagePairs = () => {
   return pairs;
 };
 
-let pairs = imagePairs();
+// FUNCTION TO LOAD SOUND
+const loadSound = async () => {
+  const { sound } = await Audio.Sound.createAsync(
+    require("../../Sounds/tile flip.wav")
+  );
+  return sound;
+};
 
-const GamePlot = () => {
-  // Loading custom font
-  // let [fontsLoaded] = useFonts({
-  //   "Pixelify-Sans": require("../../fonts/static/PixelifySans-Regular.ttf"),
-  // });
+// GENERATE PAIRS
+let pairs = generateImagePairs();
 
+const MemoGame = (props) => {
+  // STATE TO KEEP TRACK OF SOUND OBJECT
+  const [soundObject, setSoundObject] = useState();
   // STATE TO KEEP TRACK OF OPENED AND PAIRED TILES
   const [opened, setOpened] = useState([]);
   const [paired, setPaired] = useState([]);
-
   // STATE TO KEEP TRACK OF TURNS AND MATCHES
   const [turns, setTurns] = useState(0);
   const [matched, setMatched] = useState(0);
+
+  useEffect(() => {
+    // Load sound
+    loadSound().then(setSoundObject);
+  }, []);
 
   //FUNCTION TO HANDLE TURNS AND MATCHES
   const handleTurnNMatches = (isMatched) => {
@@ -113,6 +126,9 @@ const GamePlot = () => {
       if (opened.length === paired.length) {
         setOpened([tileIndex, ...paired]);
         handleTurnNMatches(false);
+        // Play sound
+        if (props.playSound)
+          soundObject.replayAsync().catch((error) => console.log(error));
       }
 
       // If one tile is already opened
@@ -122,6 +138,9 @@ const GamePlot = () => {
           setPaired([tileIndex, opened[0], ...paired]);
           setOpened([tileIndex, opened[0], ...paired]);
           handleTurnNMatches(true);
+          // play sound with single line code
+          if (props.playSound)
+            soundObject.replayAsync().catch((error) => console.log(error));
         }
 
         // Otherwise, close both the opened tiles after 2.5 sec delay
@@ -129,6 +148,9 @@ const GamePlot = () => {
           const newOpened = [tileIndex, ...opened];
           setOpened(newOpened);
           handleTurnNMatches(false);
+          // Play sound
+          if (props.playSound)
+            soundObject.replayAsync().catch((error) => console.log(error));
           await new Promise((resolve) => setTimeout(resolve, 800));
           setOpened((prevOpened) =>
             prevOpened.filter(
@@ -149,12 +171,16 @@ const GamePlot = () => {
     setTurns(0);
     setMatched(0);
     // Generate new pairs
-    pairs = imagePairs();
+    pairs = generateImagePairs();
   };
 
   return (
-    <View style={styles.gameplot}>
+    <View style={styles.MemoGame}>
+      {/* Title */}
       <Text style={styles.text}>Memo-Game</Text>
+
+      {/* MemoGame
+       */}
       <View style={styles.tileContainer}>
         {Array(rows) // row=2
           .fill()
@@ -189,6 +215,7 @@ const GamePlot = () => {
             </View>
           ))}
       </View>
+
       {/* //New Game Button */}
       <TouchableOpacity
         style={styles.newGameButtonContainer}
@@ -208,6 +235,7 @@ const GamePlot = () => {
           New Game
         </Text>
       </TouchableOpacity>
+
       {/* //Score Board */}
       <View style={styles.scoreBoard}>
         <Text style={styles.scoreBoardElem}>Turns: </Text>
@@ -227,7 +255,7 @@ const GamePlot = () => {
 
 // STYLESHEET
 const styles = StyleSheet.create({
-  gameplot: {
+  MemoGame: {
     flex: 1,
     // backgroundColor: "#333",
     alignItems: "center",
@@ -316,6 +344,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GamePlot;
+export default MemoGame;
 
 // #E8AFFF neon purple for bg of opened tiles

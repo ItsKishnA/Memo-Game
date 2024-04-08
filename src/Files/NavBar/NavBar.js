@@ -1,26 +1,22 @@
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import profileIcon from "../../Icons/user.png";
-import memoGameIcon from "../../../assets/MemoGameIcon-WithoutBG.png";
 import musicIcon from "../../Icons/music.png";
 import soundIcon from "../../Icons/audio-waves.png";
 import settingIcon from "../../Icons/setting.png";
+import memoGameIcon from "../../../assets/MemoGameIcon-WithoutBG.png";
 import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 
 const NavBar = (props) => {
-  const [currentTab, setCurrentTab] = useState(props.tab);
+  const [currentTab, setCurrentTab] = useState(props.currentTab);
   const [music, setMusic] = useState(true);
   const [sound, setSound] = useState(true);
 
+  const [isPlayingMusic, setIsPlayingMusic] = useState(true);
+
   const [musicObject, setMusicObject] = useState(null);
   const [soundObject, setSoundObject] = useState(null);
+
   useEffect(() => {
     const loadMusic = async () => {
       const _musicObject = new Audio.Sound();
@@ -29,37 +25,46 @@ const NavBar = (props) => {
       );
       setMusicObject(_musicObject);
       await _musicObject.setVolumeAsync(0.4);
-      await _musicObject.setIsLoopingAsync(true);
-      await _musicObject.playAsync();
+      // await _musicObject.setIsLoopingAsync(true); // TODO
+      // await _musicObject.playAsync(); // TODO
     };
 
     const loadSound = async () => {
       const _soundObject = new Audio.Sound();
       await _soundObject.loadAsync(require("../../../src/Sounds/onClick.wav"));
       setSoundObject(_soundObject);
-      await _soundObject.setVolumeAsync(0.4);
+      // await _soundObject.setVolumeAsync(0.4);
     };
 
     loadSound();
     loadMusic();
   }, []);
 
-  const title = ["Memo-Game", "Simon-Says"];
-
   const playMusic = async () => {
     try {
-      await musicObject?.playAsync();
+      //if music is already being played, then return
+      if (isPlayingMusic) return;
+      else {
+        await musicObject?.playAsync(); // setting music on
+        setIsPlayingMusic(true);
+      }
     } catch (error) {
       console.log(error);
     }
   };
   const pauseMusic = async () => {
     try {
-      await musicObject.pauseAsync();
+      if (!isPlayingMusic) return;
+      else {
+        await musicObject.pauseAsync();
+        setIsPlayingMusic(false);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const title = ["Memo-Game", "Simon-Says"];
 
   const handleClick = async (id, tab) => {
     if (sound) {
@@ -70,19 +75,20 @@ const NavBar = (props) => {
       }
     }
     if (id >= 4) {
-      // if (currentTab === title[id]) return;
-      // else {
-      // setCurrentTab(title[id]);
-      // props.onTabChange(title[id]);
-      // }
+      if (currentTab === title[id - 4]) return;
+      else {
+        setCurrentTab(title[id - 4]);
+        props.onTabChange(title[id - 4]);
+      }
       return;
     } else {
       if (id === 0) {
         console.log("Profile");
       } else if (id === 1) {
+        props.onSoundDisabling(!sound);
         setSound(!sound);
       } else if (id === 2) {
-        if (music) {
+        if (music && isPlayingMusic) {
           await pauseMusic();
         } else {
           await playMusic();
@@ -132,31 +138,34 @@ const NavBar = (props) => {
           element={true}
           id={4}
           source={memoGameIcon}
-          // text={title[0]}
           size={110}
           padding={0}
           paddingRight={0}
           style={{
-            backgroundColor:
-              currentTab === title[0]
-                ? "rgba(100, 100, 100, 0.25)"
-                : "transparent",
-            borderColor: currentTab === title[0] ? null : "white",
-            borderWidth: currentTab === title[0] ? 0 : 1,
+            backgroundColor: "rgba(100, 100, 100, 0.25)",
+            // : "transparent",
+            // borderColor: currentTab === title[0] ? null : "white",
+            // borderWidth: currentTab === title[0] ? 0 : 1,
             // width: 100,
           }}
         />
-        {/* <NavElement
+        <NavElement
           element={true}
-          id={1}
+          id={5}
           source={memoGameIcon}
-          text={title[1]}
+          size={110}
+          padding={0}
+          paddingRight={0}
           style={{
-            backgroundColor: currentTab === title[1] ? "#222" : "transparent",
-            borderColor: currentTab === title[1] ? null : "white",
-            borderWidth: currentTab === title[1] ? 0 : 1,
+            backgroundColor: "rgba(100, 100, 100, 0.25)",
+            // currentTab === title[1]
+            // ?
+            // : "transparent",
+            // borderColor: currentTab === title[1] ? null : "white",
+            // borderWidth: currentTab === title[1] ? 0 : 1,
+            // width: 100,
           }}
-        /> */}
+        />
       </View>
 
       {/* Sound & Music */}

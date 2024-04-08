@@ -1,15 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
-  Text,
   SafeAreaView,
-  View,
   Image,
   TouchableOpacity,
   Animated,
+  View,
 } from "react-native";
-import MemoGame from "./src/Files/Gameplot/gameplot";
-// import SimonSays from "./src/Files/SimonSays/SimonSays.js";
+import MemoGame from "./src/Files/Gameplot/gameplot.js";
+import SimonSays from "./src/Files/SimonSays/SimonSays.js";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
 import NavBar from "./src/Files/NavBar/NavBar.js";
 import { useState, useRef } from "react";
@@ -21,83 +20,80 @@ export default function App() {
   const [showMenu, setShowMenu] = useState(false);
   const [currentTab, setCurrentTab] = useState("Memo-Game");
 
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+
   // Animated Properties...
   const offsetValue = useRef(new Animated.Value(0)).current;
-  // Scale Initially must be One...
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
 
+  const createAnimation = (value, toValue) => {
+    return Animated.timing(value, {
+      toValue,
+      duration: 300,
+      useNativeDriver: true,
+    });
+  };
+
   const navBarOpen = () => {
-    // scalinng the view
-    Animated.timing(scaleValue, {
-      toValue: showMenu ? 1 : 0.88,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-
-    // scalinng the view
-    Animated.timing(offsetValue, {
-      toValue: showMenu ? 0 : 260,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-
-    // scalinng the view
-    Animated.timing(closeButtonOffset, {
-      toValue: !showMenu ? 0 : 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    Animated.parallel([
+      createAnimation(scaleValue, showMenu ? 1 : 0.88),
+      createAnimation(offsetValue, showMenu ? 0 : 260),
+      createAnimation(closeButtonOffset, !showMenu ? 0 : 0),
+    ]).start();
 
     setShowMenu(!showMenu);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
-
-      <NavBar tab={"Memo-Game"} onTabChange={(tab) => setCurrentTab(tab)} />
-      <Animated.View
-        style={[
-          styles.gameplot,
-          {
-            borderRadius: showMenu ? 20 : 0,
-            transform: [{ scale: scaleValue }, { translateX: offsetValue }],
-          },
-        ]}
-        // pointerEvents="box-none"
-      >
-        {/* Menu Icon */}
+    <View style={styles.fullScreen}>
+      <SafeAreaView style={styles.container}>
+        <StatusBar backgroundColor="transparent" style="light" hidden={false} />
+        <NavBar
+          tab={"Memo-Game"}
+          onTabChange={(tab) => setCurrentTab(tab)}
+          onSoundDisabling={(prev) => setIsSoundEnabled(prev)}
+        />
         <Animated.View
-          style={{ transform: [{ translateY: closeButtonOffset }] }}
+          style={[
+            styles.gameplot,
+            {
+              borderRadius: showMenu ? 20 : 0,
+              transform: [{ scale: scaleValue }, { translateX: offsetValue }],
+            },
+          ]}
+          // pointerEvents="box-none"
         >
-          <TouchableOpacity
-            onPress={() => navBarOpen()}
-            style={styles.NavBarIcon}
-          >
-            <Image
-              source={showMenu ? closeIcon : menuIcon} // TODO : Add close icon too { showMenu ? closeIcon : menuIcon}
-              style={{
-                // Remove these styles from the Image
-                height: "100%",
-                width: "100%",
-              }}
-            />
-          </TouchableOpacity>
-        </Animated.View>
+          {/* NavBar Icon */}
+          <Animated.View>
+            <TouchableOpacity
+              onPress={() => navBarOpen()}
+              style={styles.NavBarIcon}
+            >
+              <Image
+                source={showMenu ? closeIcon : menuIcon} // TODO : Add close icon too { showMenu ? closeIcon : menuIcon}
+                style={styles.menuOrCloseImage}
+              />
+            </TouchableOpacity>
+          </Animated.View>
 
-        {/* <View> */}
-        {/*if navbar is on memo game then gameplot, or if simon game then new Tab */}
-        {/* {currentTab === "Memo-Game" ? <MemoGame /> : <SimonSays />} */}
-        <MemoGame />
-        {/* <SimonSays /> */}
-      </Animated.View>
-      <Fingerprint />
-    </SafeAreaView>
+          {/* <View> */}
+          {/*if navbar is on memo game then gameplot, or if simon game then new Tab */}
+          {currentTab === "Memo-Game" ? <MemoGame /> : <SimonSays />}
+          {/* <MemoGame playSound={isSoundEnabled} /> */}
+        </Animated.View>
+        {/* <Fingerprint /> */}
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  fullScreen: {
+    flex: 1,
+    backgroundColor: "#151515",
+  },
+
   container: {
     flex: 1,
     backgroundColor: "black",
@@ -108,7 +104,7 @@ const styles = StyleSheet.create({
   gameplot: {
     position: "absolute",
     flexGrow: 1,
-    backgroundColor: "#151515",
+    backgroundColor: "black",
     paddingVertical: 35,
     top: 0,
     left: 0,
@@ -125,17 +121,20 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     zIndex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
-    //
     // rgb(138,180,248)
     backgroundColor: "#76ABAE",
     backgroundColor: "#03c6e3",
     borderRadius: 50,
   },
+
+  menuOrCloseImage: {
+    height: "100%",
+    width: "100%",
+  },
 });
 
-// expo-font Installed
+// installed expo-av
+// installed react-native-av
 
 // import { useFonts } from "expo-font";
 

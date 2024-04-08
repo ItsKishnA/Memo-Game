@@ -9,7 +9,6 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@unimodules/react-native-adapter": "^6.3.9",
     "expo": "~50.0.6",
     "expo-av": "^13.10.5",
     "expo-font": "~11.10.3",
