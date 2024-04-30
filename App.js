@@ -7,13 +7,14 @@ import {
   Animated,
   View,
 } from "react-native";
-import MemoGame from "./src/Files/Gameplot/gameplot.js";
+import MemoGame from "./src/Files/MemoGame/MemoGame.js";
 import SimonSays from "./src/Files/SimonSays/SimonSays.js";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
 import NavBar from "./src/Files/NavBar/NavBar.js";
 import { useState, useRef } from "react";
 import menuIcon from "./src/Icons/menu.png";
 import closeIcon from "./src/Icons/close.png";
+import Upgrading from "./src/Files/Upgrading/rough.js";
 //TODO : Add splash screen to minmize the loading time of fonts
 
 export default function App() {
@@ -56,13 +57,12 @@ export default function App() {
         />
         <Animated.View
           style={[
-            styles.gameplot,
+            styles.memogame,
             {
               borderRadius: showMenu ? 20 : 0,
               transform: [{ scale: scaleValue }, { translateX: offsetValue }],
             },
           ]}
-          // pointerEvents="box-none"
         >
           {/* NavBar Icon */}
           <Animated.View>
@@ -78,11 +78,11 @@ export default function App() {
           </Animated.View>
 
           {/* <View> */}
-          {/*if navbar is on memo game then gameplot, or if simon game then new Tab */}
+          {/*if navbar is on memo game then memogame, or if simon game then new Tab */}
           {currentTab === "Memo-Game" ? <MemoGame /> : <SimonSays />}
-          {/* <MemoGame playSound={isSoundEnabled} /> */}
+          {/* <Upgrading /> */}
         </Animated.View>
-        {/* <Fingerprint /> */}
+        <Fingerprint />
       </SafeAreaView>
     </View>
   );
@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 
-  gameplot: {
+  memogame: {
     position: "absolute",
     flexGrow: 1,
-    backgroundColor: "black",
+    backgroundColor: "#151515",
     paddingVertical: 35,
     top: 0,
     left: 0,

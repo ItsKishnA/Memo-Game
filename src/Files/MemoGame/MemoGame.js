@@ -175,12 +175,11 @@ const MemoGame = (props) => {
   };
 
   return (
-    <View style={styles.MemoGame}>
+    <View style={styles.Container}>
       {/* Title */}
-      <Text style={styles.text}>Memo-Game</Text>
+      <Text style={styles.gameHeader}>Memo-Game</Text>
 
-      {/* MemoGame
-       */}
+      {/* MemoGame */}
       <View style={styles.tileContainer}>
         {Array(rows) // row=2
           .fill()
@@ -205,7 +204,8 @@ const MemoGame = (props) => {
                         source={source}
                         style={[
                           styles.tile,
-                          source === CardImages[0].image && styles.otherStyle,
+                          source === CardImages[0].image &&
+                            styles.tileClosedStyle,
                         ]}
                         keyValue={pairs[tileIndex]}
                       />
@@ -224,12 +224,9 @@ const MemoGame = (props) => {
         <Text
           style={{
             color: "white",
-            // fontFamily: "Pixelify-Sans",
             fontSize: 14,
-            // textAlign: "center",
-            // alignContent: "center",
-            // justifyContent: "center",
-            // alignItems: "center",
+            textAlign: "center",
+            justifyContent: "center",
           }}
         >
           New Game
@@ -237,17 +234,33 @@ const MemoGame = (props) => {
       </TouchableOpacity>
 
       {/* //Score Board */}
-      <View style={styles.scoreBoard}>
-        <Text style={styles.scoreBoardElem}>Turns: </Text>
-        <Text
-          style={[
-            styles.scoreBoardElem,
-            { fontSize: 60, fontWeight: 800, marginTop: -10 },
-            // { transform: [{ translateY: scrollAnim }] },
-          ]}
-        >
-          {turns}
-        </Text>
+      <View style={styles.scoreBoardPosition}>
+        <View style={[styles.scoreBoardElem]}>
+          <Text style={styles.innerScore}>Turns: </Text>
+          <Text
+            style={[
+              styles.innerScore,
+              { fontSize: 55, fontWeight: 800, marginTop: -10 },
+            ]}
+          >
+            {turns}
+          </Text>
+        </View>
+        <View style={[styles.scoreBoardElem]}>
+          <Text style={styles.innerScore}>Matches: </Text>
+          <Text
+            style={[
+              styles.innerScore,
+              {
+                fontSize: 55,
+                fontWeight: 800,
+                marginTop: -10,
+              },
+            ]}
+          >
+            {matched}
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -255,7 +268,7 @@ const MemoGame = (props) => {
 
 // STYLESHEET
 const styles = StyleSheet.create({
-  MemoGame: {
+  Container: {
     flex: 1,
     // backgroundColor: "#333",
     alignItems: "center",
@@ -279,7 +292,7 @@ const styles = StyleSheet.create({
     // margin: 10,
   },
 
-  text: {
+  gameHeader: {
     position: "absolute",
     top: 20,
     fontSize: 32,
@@ -289,37 +302,41 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  scoreBoard: {
+  scoreBoardPosition: {
     position: "absolute",
-    alignItems: "center",
-    right: 25,
-    bottom: 15,
+    right: 18,
+    bottom: 5,
     padding: 10,
-
-    backgroundColor: "rgba(100, 100, 100, 0.25)",
-    flexDirection: "column",
-    borderRadius: 10,
-    borderColor: "rgba(232, 175, 255, 0.3)",
+    flexDirection: "row",
   },
 
   scoreBoardElem: {
-    // color: "#E8AFFF",
+    borderColor: "rgba(232, 175, 255, 0.3)",
+    borderRadius: 10,
+    borderWidth: 1,
+    margin: 5,
+    backgroundColor: "rgba(100, 100, 100, 0.25)",
+    padding: 5,
+  },
+
+  innerScore: {
+    textAlign: "center",
     color: "#fcadd8",
-    fontSize: 15,
-    // fontFamily: "Pixelify-Sans",
-    marginTop: 5,
   },
 
   newGameButtonContainer: {
+    //styling
     position: "absolute",
     height: 50,
     padding: 10,
     paddingHorizontal: 30,
 
+    //border
     borderRadius: 25,
     borderColor: "#05eeff",
     borderWidth: 2,
 
+    //positiion
     bottom: 15,
     left: 25,
     justifyContent: "center",
@@ -336,7 +353,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
-  otherStyle: {
+  tileClosedStyle: {
     tintColor: "rgba(211, 227, 253, 0.9)",
     // tintColor: "white",
     tintColor: "#EEEEEE",

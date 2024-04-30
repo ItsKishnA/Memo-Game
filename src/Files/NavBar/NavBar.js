@@ -4,6 +4,7 @@ import musicIcon from "../../Icons/music.png";
 import soundIcon from "../../Icons/audio-waves.png";
 import settingIcon from "../../Icons/setting.png";
 import memoGameIcon from "../../../assets/MemoGameIcon-WithoutBG.png";
+import simonSaysIcon from "../../../assets/SimonSaysLogo.png";
 import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 
@@ -152,7 +153,7 @@ const NavBar = (props) => {
         <NavElement
           element={true}
           id={5}
-          source={memoGameIcon}
+          source={simonSaysIcon}
           size={110}
           padding={0}
           paddingRight={0}

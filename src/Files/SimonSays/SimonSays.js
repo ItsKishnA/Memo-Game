@@ -18,75 +18,74 @@ const SimonSays = () => {
   const WHITE = 125;
   const GREEN = 100;
   const RED = 100;
-  const BLUE = 170;
+  const BLUE = 160;
   const INNER_CIRCULAR_BUTTON_SMALLER_BY = 35;
   const BUTTON_COLOR = "black";
 
   // FUNCTION to choose and add a random number to the game sequence
   const addRandomNumber = () => {
     const randomNumber = Math.floor(Math.random() * 4) + 1;
-    setGameSequence((prev) => [...prev, randomNumber]);
-    setNum(randomNumber);
+    // setGameSequence((prev) => [...prev, randomNumber]);
+    // setNum(randomNumber);
     console.log([randomNumber]);
-    startAnimation();
   };
 
-  const handleClick = (id) => {
-    if (id === num) {
-      setScore((prev) => prev + 1);
+  const handleClick = useCallback(
+    (id) => {
+      // if (id === num) {
+      //   console.log("Correct");
+      // } else {
+      //   console.log("Incorrect");
+      //   (async () => {
+      //     await new Promise((resolve) => setTimeout(resolve, 2000));
+      //     handleNewGame();
+      //   })();
+      // }
+      if (id === num) {
+        console.log("Correct");
+      } else {
+        console.log("Incorrect");
+      }
+      console.log(id);
+    },
+    [num]
+  );
 
-      addRandomNumber();
-    } else {
-      ToastAndroid.show("You lost with score: " + score, ToastAndroid.SHORT);
-      (async () => {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      })();
-      handleNewGame();
-    }
-  };
-
-  const handleNewGame = () => {
+  const handleNewGame = useCallback(() => {
     console.log("New Game");
-    setGameSequence([]);
-    setScore(0);
-    setNum(null);
+    // setGameSequence([]);
+    // setScore(0);
+    // setNum(0);
     addRandomNumber();
-  };
+  }, []);
 
   useEffect(() => {
     handleNewGame();
   }, []);
-  const opacityValue = useRef(new Animated.Value(0)).current;
 
-  const startAnimation = () => {
-    Animated.timing(opacityValue, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start(() => {
-      Animated.timing(opacityValue, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: false,
-      }).start();
-    });
-  };
+  /*
+  When button is pressed handleClick(id) is called
+  */
 
   // /* UI-Components
-  const CircularButton = ({ id, color, height, width, borderRadius }) => (
-    <TouchableOpacity
-      style={{
-        backgroundColor: color,
-        width,
-        height,
-        borderRadius,
-        margin: 5,
-
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onPress={() => handleClick(id)}
-    ></TouchableOpacity>
+  const CircularButton = useCallback(
+    ({ id, color, height, width, borderRadius }) => {
+      return (
+        <TouchableOpacity
+          style={[
+            styles.innerCircle,
+            {
+              width,
+              height,
+              borderRadius,
+              backgroundColor: color,
+            },
+          ]}
+          onPress={() => handleClick(id)}
+        />
+      );
+    },
+    []
   );
 
   const Block = ({
@@ -110,16 +109,7 @@ const SimonSays = () => {
           circleStyle,
         ]}
       >
-        {/* <Animated.View
-          style={{
-            backgroundColor: "white",
-            height: WHITE - INNER_CIRCULAR_BUTTON_SMALLER_BY,
-            width: WHITE - INNER_CIRCULAR_BUTTON_SMALLER_BY,
-            borderRadius: (WHITE - INNER_CIRCULAR_BUTTON_SMALLER_BY) / 2,
-            opacity: opacityValue,
-            // zIndex: -,
-          }}
-        > */}
+        {}
         <CircularButton
           id={id}
           color={BUTTON_COLOR}
@@ -167,7 +157,6 @@ const SimonSays = () => {
             width={GREEN}
             borderRadius={GREEN / 2}
             circleStyle={styles.greenCircle}
-            // buttonColor=""
           />
         </View>
         <View style={styles.row}>
@@ -219,7 +208,7 @@ const SimonSays = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "transparent",
     paddingVertical: 20,
     flexDirection: "column",
     zIndex: -1,
@@ -232,7 +221,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     //shifting the view a little bit left
-    left: -10,
+    // left: -10,
   },
 
   circle: {
@@ -240,6 +229,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#e9103b",
     margin: 5,
     padding: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  innerCircle: {
+    margin: 5,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -253,7 +248,7 @@ const styles = StyleSheet.create({
 
   block: {
     // backgroundColor: "gray",
-    aspectRatio: 1,
+    // aspectRatio: 1,
     flex: 1,
     margin: 3,
     padding: 3,
@@ -309,31 +304,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     zIndex: -1,
   },
-  // inner: {
-  //   backgroundColor: "#DEE9F7",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   borderColor: "#E2ECFD",
-  //   borderWidth: 1,
-  // },
-  // topShadow: {
-  //   shadowOffset: {
-  //     width: -6,
-  //     height: -6,
-  //   },
-  //   shadowOpacity: 1,
-  //   shadowRadius: 6,
-  //   shadowColor: "#FBFFFF",
-  // },
-  // bottomShadow: {
-  //   shadowOffset: {
-  //     width: 6,
-  //     height: 6,
-  //   },
-  //   shadowOpacity: 1,
-  //   shadowRadius: 6,
-  //   shadowColor: "#B7C4DD",
-  // },
 });
 
 export default SimonSays;
