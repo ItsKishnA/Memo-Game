@@ -1,12 +1,16 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
-import profileIcon from "../../Icons/user.png";
-import musicIcon from "../../Icons/music.png";
-import soundIcon from "../../Icons/audio-waves.png";
-import settingIcon from "../../Icons/setting.png";
-import memoGameIcon from "../../../assets/MemoGameIcon-WithoutBG.png";
-import simonSaysIcon from "../../../assets/SimonSaysLogo.png";
+import profileIcon from "../../../assets/icons/user.png";
+import musicIcon from "../../../assets/icons/music.png";
+import soundIcon from "../../../assets/icons/audio-waves.png";
+import settingIcon from "../../../assets/icons/setting.png";
+import memoGameIcon from "../../../assets/icons/MemoGameIcon-WithoutBG.png";
+import simonSaysIcon from "../../../assets/icons/SimonSaysLogo.png";
+
+import { icons } from "../../Constants/icons"; // TODO
 import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
+
+const MUSIC = false; // TODO
 
 const NavBar = (props) => {
   const [currentTab, setCurrentTab] = useState(props.currentTab);
@@ -22,17 +26,21 @@ const NavBar = (props) => {
     const loadMusic = async () => {
       const _musicObject = new Audio.Sound();
       await _musicObject.loadAsync(
-        require("../../../src/Sounds/Automation.mp3")
+        require("../../../assets/sounds/Automation.mp3")
       );
       setMusicObject(_musicObject);
       await _musicObject.setVolumeAsync(0.4);
-      // await _musicObject.setIsLoopingAsync(true); // TODO
-      // await _musicObject.playAsync(); // TODO
+      if (MUSIC) {
+        await _musicObject.setIsLoopingAsync(true); // TODO
+        await _musicObject.playAsync(); // TODO
+      }
     };
 
     const loadSound = async () => {
       const _soundObject = new Audio.Sound();
-      await _soundObject.loadAsync(require("../../../src/Sounds/onClick.wav"));
+      await _soundObject.loadAsync(
+        require("../../../assets/sounds/onClick.wav")
+      );
       setSoundObject(_soundObject);
       // await _soundObject.setVolumeAsync(0.4);
     };
@@ -131,8 +139,7 @@ const NavBar = (props) => {
   return (
     <View style={styles.navBar}>
       {/* Profile */}
-      <NavElement id={0} source={profileIcon} text="Profile" />
-
+      <NavElement id={0} source={icons.profile} text="Profile" /> // TODO
       {/* Navbar Elements*/}
       <View style={{ flex: 1, justifyContent: "center" }}>
         <NavElement
@@ -168,7 +175,6 @@ const NavBar = (props) => {
           }}
         />
       </View>
-
       {/* Sound & Music */}
       <View style={{ flexDirection: "row" }}>
         <NavElement
@@ -194,7 +200,6 @@ const NavBar = (props) => {
           }}
         />
       </View>
-
       {/* Settings */}
       <NavElement id={3} source={settingIcon} text="Settings" />
     </View>

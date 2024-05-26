@@ -12,9 +12,9 @@ import SimonSays from "./src/Files/SimonSays/SimonSays.js";
 import Fingerprint from "./src/Files/FingerPrint/Fingerprint";
 import NavBar from "./src/Files/NavBar/NavBar.js";
 import { useState, useRef } from "react";
-import menuIcon from "./src/Icons/menu.png";
-import closeIcon from "./src/Icons/close.png";
-import Upgrading from "./src/Files/Upgrading/rough.js";
+
+import menuIcon from "./assets/icons/menu.png";
+import closeIcon from "./assets/icons/close.png";
 //TODO : Add splash screen to minmize the loading time of fonts
 
 export default function App() {
@@ -28,19 +28,19 @@ export default function App() {
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
 
-  const createAnimation = (value, toValue) => {
+  const animateValue = (value, toValue, duration = 300) => {
     return Animated.timing(value, {
       toValue,
-      duration: 300,
+      duration,
       useNativeDriver: true,
     });
   };
 
   const navBarOpen = () => {
     Animated.parallel([
-      createAnimation(scaleValue, showMenu ? 1 : 0.88),
-      createAnimation(offsetValue, showMenu ? 0 : 260),
-      createAnimation(closeButtonOffset, !showMenu ? 0 : 0),
+      animateValue(scaleValue, showMenu ? 1 : 0.88),
+      animateValue(offsetValue, showMenu ? 0 : 260),
+      animateValue(closeButtonOffset, !showMenu ? 0 : 0),
     ]).start();
 
     setShowMenu(!showMenu);
@@ -77,10 +77,8 @@ export default function App() {
             </TouchableOpacity>
           </Animated.View>
 
-          {/* <View> */}
           {/*if navbar is on memo game then memogame, or if simon game then new Tab */}
           {currentTab === "Memo-Game" ? <MemoGame /> : <SimonSays />}
-          {/* <Upgrading /> */}
         </Animated.View>
         <Fingerprint />
       </SafeAreaView>

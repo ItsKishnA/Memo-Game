@@ -1,12 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  ToastAndroid,
-  Animated,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useState, useCallback } from "react";
 
 const SimonSays = () => {
