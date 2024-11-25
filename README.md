@@ -4,4 +4,18 @@ This is a mobile app, that is basically coded in JavaScript using React Native F
 
 > Dependencies : expo-av
 
-![](./assets/icon.png)
+<!-- ![](./SS_Memo.png) -->
+
+<!-- ![](./SS_Simon.png) -->
+
+<div style="display:flex; flex-direction: column;">
+    <img
+        src="./SS_Memo.png"
+    />
+    <!-- <div> -->
+    <img
+        src="./SS_Simon.png"
+    />
+    <!-- </div> -->
+
+</div>
