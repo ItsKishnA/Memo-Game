@@ -51,7 +51,7 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor="transparent" style="light" hidden={false} />
         <NavBar
-          tab={"Memo-Game"}
+          tab={"SimonSays"}
           onTabChange={(tab) => setCurrentTab(tab)}
           onSoundDisabling={(prev) => setIsSoundEnabled(prev)}
         />
@@ -78,7 +78,8 @@ export default function App() {
           </Animated.View>
 
           {/*if navbar is on memo game then memogame, or if simon game then new Tab */}
-          {currentTab === "Memo-Game" ? <MemoGame /> : <SimonSays />}
+          {/* {currentTab === "SimonSays" ? <MemoGame /> : <SimonSays />} */}
+          <SimonSays />
         </Animated.View>
         <Fingerprint />
       </SafeAreaView>

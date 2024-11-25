@@ -1,14 +1,14 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { Audio } from "expo-av";
+
 import profileIcon from "../../../assets/icons/user.png";
 import musicIcon from "../../../assets/icons/music.png";
 import soundIcon from "../../../assets/icons/audio-waves.png";
 import settingIcon from "../../../assets/icons/setting.png";
 import memoGameIcon from "../../../assets/icons/MemoGameIcon-WithoutBG.png";
 import simonSaysIcon from "../../../assets/icons/SimonSaysLogo.png";
-
-import { icons } from "../../Constants/icons"; // TODO
-import { useEffect, useState } from "react";
-import { Audio } from "expo-av";
+// import { icons } from "../../Constants/icons"; // TODO
 
 const MUSIC = false; // TODO
 
@@ -138,8 +138,9 @@ const NavBar = (props) => {
 
   return (
     <View style={styles.navBar}>
-      {/* Profile */}
-      <NavElement id={0} source={icons.profile} text="Profile" /> // TODO
+      {/* Profile // TODO */}
+      <NavElement id={0} source={profileIcon} text="Profile" />
+
       {/* Navbar Elements*/}
       <View style={{ flex: 1, justifyContent: "center" }}>
         <NavElement

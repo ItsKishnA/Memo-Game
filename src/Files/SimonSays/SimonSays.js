@@ -2,84 +2,129 @@ import React, { useEffect, useRef } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useState, useCallback } from "react";
 
+const _rounded = 10;
+const _colors = {
+  white: "#FAF9F6",
+  green: "#98FB98",
+  red: "#E0115F",
+  blue: "#0096FF",
+  innerCircle: "#000000",
+};
+const _sizes = {
+  white: 125,
+  green: 100,
+  red: 100,
+  blue: 160,
+  innerCircle: 38,
+};
+
 const SimonSays = () => {
-  const [score, setScore] = useState(0);
-  const [gameSequence, setGameSequence] = useState([]);
-  const [num, setNum] = useState(0);
+  // State Variables
+  const [gameSeq, setGameSeq] = useState([]);
+  const [userSeq, setUserSeq] = useState([]);
+  // const [lose, setLose] = useState(false);
+  const [userTurn, setUserTurn] = useState(false);
+  const [iter, setIter] = useState(0);
+  // var randomVar;
+  const [userInput, setUserInput] = useState(0);
 
-  // Petal Attributes
-  const WHITE = 125;
-  const GREEN = 100;
-  const RED = 100;
-  const BLUE = 160;
-  const INNER_CIRCULAR_BUTTON_SMALLER_BY = 35;
-  const BUTTON_COLOR = "black";
-
-  // FUNCTION to choose and add a random number to the game sequence
-  const addRandomNumber = () => {
-    const randomNumber = Math.floor(Math.random() * 4) + 1;
-    // setGameSequence((prev) => [...prev, randomNumber]);
-    // setNum(randomNumber);
-    console.log([randomNumber]);
+  const check = (id, mustBe) => {
+    // console.log(gameSeq + " " + id);
+    if (mustBe === id) {
+      // setUserSeq((prev) => [...prev, id]);
+      console.log("Correct");
+      return true;
+    }
+    return false;
   };
 
-  const handleClick = useCallback(
-    (id) => {
-      // if (id === num) {
-      //   console.log("Correct");
-      // } else {
-      //   console.log("Incorrect");
-      //   (async () => {
-      //     await new Promise((resolve) => setTimeout(resolve, 2000));
-      //     handleNewGame();
-      //   })();
-      // }
-      if (id === num) {
-        console.log("Correct");
-      } else {
-        console.log("Incorrect");
+  // ERASE data
+  const erasePreviousData = () => {
+    setUserSeq([]);
+    setGameSeq([]);
+    // setLose(false);
+    setUserTurn(false);
+
+    console.log("Previous Data Erased");
+  };
+
+  // FLIPs whosever turn it is
+  const turnFlipper = () => setUserTurn((prev) => !prev);
+
+  // PC's TURN
+  const pcTurn = () => {
+    const randomVar = Math.floor(Math.random() * 4) + 1;
+
+    setGameSeq((prev) => {
+      const newSeq = [...prev, randomVar];
+      console.log("Game Seq : " + newSeq);
+      return newSeq;
+    });
+
+    console.log("PC's Turn : " + randomVar);
+    setTimeout(() => {
+      turnFlipper();
+    }, 800);
+  };
+
+  // takes button ID and CHECKs for processing
+  const handleClick = ({ id }) => {
+    if (!userTurn) {
+      return;
+    }
+
+    if (iter < gameSeq.length) {
+      if (!check(id, gameSeq[iter])) {
+        console.log("User Lost");
+        // handleNewGame();
       }
-      console.log(id);
-    },
-    [num]
-  );
+      setIter((prev) => prev + 1);
+    }
 
-  const handleNewGame = useCallback(() => {
-    console.log("New Game");
-    // setGameSequence([]);
-    // setScore(0);
-    // setNum(0);
-    addRandomNumber();
-  }, []);
+    console.log(iter + " " + gameSeq.length + "This is being checked here");
+    if (iter === gameSeq.length) {
+      // console.log("User Won");
+      setIter(0);
+      turnFlipper();
+      setTimeout(() => {
+        pcTurn();
+      }, 800);
+    }
+    // console.log("Click : " + gameSeq[iter] + " " + gameSeq + " " + iter);
+    console.log("User CLicked : " + id + ". Next is : " + gameSeq[iter]);
 
+    // console.log("User Clicked : " + id);
+  };
+
+  // ERASE data & BEGIN
+  const handleNewGame = () => {
+    erasePreviousData();
+    console.log("*****************NEW GAME*****************");
+    pcTurn();
+  };
+
+  // initialiser
   useEffect(() => {
     handleNewGame();
   }, []);
 
-  /*
-  When button is pressed handleClick(id) is called
-  */
-
   // /* UI-Components
-  const CircularButton = useCallback(
-    ({ id, color, height, width, borderRadius }) => {
-      return (
-        <TouchableOpacity
-          style={[
-            styles.innerCircle,
-            {
-              width,
-              height,
-              borderRadius,
-              backgroundColor: color,
-            },
-          ]}
-          onPress={() => handleClick(id)}
-        />
-      );
-    },
-    []
-  );
+  const CircularButton = ({ id, color, height, width, borderRadius }) => {
+    return (
+      <TouchableOpacity
+        style={{
+          margin: 5,
+          alignItems: "center",
+          justifyContent: "center",
+          width,
+          height,
+          borderRadius,
+          backgroundColor: color,
+        }}
+        onPress={() => handleClick({ id })}
+      />
+    );
+  };
 
   const Block = ({
     id,
@@ -105,30 +150,22 @@ const SimonSays = () => {
         {}
         <CircularButton
           id={id}
-          color={BUTTON_COLOR}
-          height={height - INNER_CIRCULAR_BUTTON_SMALLER_BY}
-          width={width - INNER_CIRCULAR_BUTTON_SMALLER_BY}
-          borderRadius={(height - INNER_CIRCULAR_BUTTON_SMALLER_BY) / 2}
+          color={_colors.innerCircle}
+          height={height - _sizes.innerCircle}
+          width={width - _sizes.innerCircle}
+          borderRadius={(height - _sizes.innerCircle) / 2}
         />
-        {/* </Animated.View> */}
       </View>
     </View>
   );
-  // UI-Components */
 
+  // UI-Components */
   return (
     <View style={styles.container}>
-      <View style={styles.scoreBoard}>
+      {/* <View style={styles.scoreBoard}>
         <Text style={{ color: "white", fontSize: 15 }}>Score:</Text>
-        <Text
-          style={[
-            styles.scoreBoardElem,
-            { fontSize: 60, fontWeight: 800, marginTop: -10 },
-          ]}
-        >
-          {score}
-        </Text>
-      </View>
+        <Text style={[styles.scoreBoardElem]}>{score}</Text>
+      </View> */}
 
       <View style={styles.simonGame}>
         <View style={styles.row}>
@@ -136,9 +173,9 @@ const SimonSays = () => {
             id={1}
             alignItems="flex-end"
             justifyContent="flex-end"
-            height={WHITE}
-            width={WHITE}
-            borderRadius={WHITE / 2}
+            height={_sizes.white}
+            width={_sizes.white}
+            borderRadius={_sizes.white / 2}
             circleStyle={styles.whiteCircle}
           />
 
@@ -146,9 +183,9 @@ const SimonSays = () => {
             id={2}
             alignItems="flex-start"
             justifyContent="flex-end"
-            height={GREEN}
-            width={GREEN}
-            borderRadius={GREEN / 2}
+            height={_sizes.green}
+            width={_sizes.green}
+            borderRadius={_sizes.green / 2}
             circleStyle={styles.greenCircle}
           />
         </View>
@@ -157,18 +194,18 @@ const SimonSays = () => {
             id={3}
             alignItems="flex-end"
             justifyContent="flex-start"
-            height={RED}
-            width={RED}
-            borderRadius={RED / 2}
+            height={_sizes.red}
+            width={_sizes.red}
+            borderRadius={_sizes.red / 2}
             circleStyle={styles.redCircle}
           />
           <Block
             id={4}
             alignItems="flex-start"
             justifyContent="flex-start"
-            height={BLUE}
-            width={BLUE}
-            borderRadius={BLUE / 2}
+            height={_sizes.blue}
+            width={_sizes.blue}
+            borderRadius={_sizes.blue / 2}
             circleStyle={styles.blueCircle}
           />
         </View>
@@ -226,12 +263,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  innerCircle: {
-    margin: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
   row: {
     flexDirection: "row",
     alignSelf: "stretch",
@@ -248,23 +279,23 @@ const styles = StyleSheet.create({
   },
 
   whiteCircle: {
-    backgroundColor: "#FAF9F6",
-    borderBottomRightRadius: 10,
+    backgroundColor: _colors.white,
+    borderBottomRightRadius: _rounded,
   },
 
   greenCircle: {
-    backgroundColor: "#98FB98",
-    borderBottomLeftRadius: 10,
+    backgroundColor: _colors.green,
+    borderBottomLeftRadius: _rounded,
   },
 
   redCircle: {
-    backgroundColor: "#E0115F",
-    borderTopRightRadius: 10,
+    backgroundColor: _colors.red,
+    borderTopRightRadius: _rounded,
   },
 
   blueCircle: {
-    backgroundColor: "#0096FF",
-    borderTopLeftRadius: 10,
+    backgroundColor: _colors.blue,
+    borderTopLeftRadius: _rounded,
   },
 
   scoreBoard: {
@@ -285,6 +316,9 @@ const styles = StyleSheet.create({
     color: "#fcadd8",
     fontSize: 15,
     marginTop: 5,
+    fontSize: 60,
+    fontWeight: 800,
+    marginTop: -10,
   },
 
   instruction: {

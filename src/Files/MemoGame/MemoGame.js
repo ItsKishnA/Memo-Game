@@ -83,7 +83,7 @@ const MemoGame = (props) => {
   const PAIR_SIZE = useMemo(() => 2, []);
 
   // GENERATE PAIRS
-  let pairs = useMemo(generateImagePairs, []);
+  const [pairs, setPairs] = useState(generateImagePairs());
 
   // FUNCTION TO HANDLE NEW GAME BUTTON PRESS
   const handleNewGame = useCallback(() => {
@@ -96,7 +96,7 @@ const MemoGame = (props) => {
     setMatched(0);
 
     // Generate new pairs
-    pairs = generateImagePairs();
+    setPairs(generateImagePairs());
   }, []);
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const MemoGame = (props) => {
 
       // Otherwise, close both the opened tiles after 2.5 sec delay
       else {
-        setOpened(tileIndex, ...opened);
+        setOpened([tileIndex, ...opened]);
         handleTurnNMatches(false);
         await new Promise((resolve) => setTimeout(resolve, CLOSE_DELAY));
         setOpened((prevOpened) =>
@@ -171,11 +171,9 @@ const MemoGame = (props) => {
                 .fill()
                 .map((_, j) => {
                   const tileIndex = COLUMNS * i + j; // COLUMNS=4 * i + j
-                  const source = useMemo(() => {
-                    return opened.includes(tileIndex)
-                      ? CardImages[pairs[tileIndex]].image
-                      : CardImages[0].image;
-                  }, [opened, pairs]);
+                  const source = opened.includes(tileIndex)
+                    ? CardImages[pairs[tileIndex]].image
+                    : CardImages[0].image;
 
                   return (
                     <TouchableOpacity
