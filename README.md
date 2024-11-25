@@ -2,20 +2,18 @@
 
 This is a mobile app, that is basically coded in JavaScript using React Native FrameWork.
 
-> Dependencies : expo-av
+> Dependencies : expo-av (For Audio)
 
-<!-- ![](./SS_Memo.png) -->
+<img
+    src="./games.png"
+/>
 
-<!-- ![](./SS_Simon.png) -->
+<hr/>
 
-<div style="display:flex; flex-direction: column;">
-    <img
-        src="./SS_Memo.png"
-    />
-    <!-- <div> -->
-    <img
-        src="./SS_Simon.png"
-    />
-    <!-- </div> -->
+#### Themes:
 
-</div>
+- Minimalistic
+- Colorful
+- Dark Mode
+
+#### Fork this repo and submit a PR to collaborate...
